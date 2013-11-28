@@ -1,0 +1,145 @@
+﻿<UserControl x:Class="FestivalProject.View.CPersonen"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mui="http://firstfloorsoftware.com/ModernUI"
+             xmlns:vm="clr-namespace:FestivalProject.ViewModel"
+             xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Extras.WPF45"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"           
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    
+    <UserControl.DataContext>
+        <vm:CPersonenVM/>
+    </UserControl.DataContext>
+    
+    <UserControl.Resources>
+
+        <ControlTemplate x:Key="ErrorTemplate">
+            <StackPanel>
+                <Border BorderBrush="Black" BorderThickness="2">
+                    <AdornedElementPlaceholder/>
+                </Border>
+                <TextBlock Foreground="Black" Text="{Binding [0].ErrorContent}"/>
+            </StackPanel>
+        </ControlTemplate>
+
+        <Style TargetType="{x:Type Label}">
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+        </Style>
+        <Style TargetType="{x:Type TextBlock}">
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+        </Style>
+        <Style x:Key="modernzoek" TargetType="{x:Type Button}">
+            <Setter Property="Margin" Value="5" />
+            <Setter Property="Background" Value="white" />
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="Black" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+    
+    <Grid Style="{StaticResource ContentRoot}">
+
+        <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2">
+            <xctk:WatermarkTextBox x:Name="txtZoeken" Height="30" Watermark="Zoeken..." Width="180"/>
+
+        <Button Name="btnZoek" Command="{Binding SearchCommand}" CommandParameter="{Binding ElementName=txtZoeken}"
+            Height="30" Width="36" Style="{StaticResource modernzoek}">
+            <Image Source="../Assets/zoeken.png" Visibility="Visible" Stretch="Fill"/>
+        </Button>
+        </StackPanel>
+            
+        <DataGrid Name="DtGridPersonen" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserResizeRows="False" CanUserAddRows="False"
+            Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="4" Grid.Row="1" AutoGenerateColumns="False"
+                  ItemsSource="{Binding Persons}" SelectionUnit="FullRow" SelectedItem="{Binding SelectedContactperson}"
+                  >
+
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="SelectionChanged">
+                    <cmd:EventToCommand Command="{Binding EditCommand}" PassEventArgsToCommand="True"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Naam" Binding="{Binding Name}"/>
+                <DataGridTextColumn Header="Type" IsReadOnly="True" Binding="{Binding JobRole.Name}"/>
+                <DataGridTextColumn Header="Telefoonnummer" Binding="{Binding Phone}"/>
+                <DataGridTextColumn Header="Email" Binding="{Binding Email}"/>
+            </DataGrid.Columns>
+            
+        </DataGrid>
+        
+        <Button Name="btnVerwijderen" Content="Verwijderen" Margin="5" Command="{Binding DeleteCommand}"
+                Grid.Column="0" Grid.Row="5"
+                ></Button>
+        
+        <TextBlock Text="Nieuwe contactpersoon:"
+                   Grid.Column="3" Grid.Row="0"
+                   ></TextBlock>
+        
+        <Label Content="Naam:"
+               Grid.Column="2" Grid.Row="1"
+               ></Label>
+
+        <TextBox Name="txbName"
+            Grid.Column="3" Grid.Row="1" Margin="9,9,9,16" Validation.ErrorTemplate="{StaticResource ErrorTemplate}"
+                 Text="{Binding Contactperson.Name, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
+            ></TextBox>
+        
+        <Label Content="Type:"
+               Grid.Column="2" Grid.Row="2"
+               ></Label>
+        
+        <ComboBox Name="cboType"
+            Grid.Column="3" Grid.Row="2" Margin="9,9,9,16"
+            ItemsSource="{Binding ContactpersonTypes}"
+            DisplayMemberPath="Name" Validation.ErrorTemplate="{StaticResource ErrorTemplate}"
+                  SelectedItem="{Binding Contactperson.JobRole, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
+            ></ComboBox>
+        
+        <Label Content="Telefoonnnummer:"
+               Grid.Column="2" Grid.Row="3"
+               ></Label>
+
+        <TextBox Name="txbNummer" Validation.ErrorTemplate="{StaticResource ErrorTemplate}"
+            Grid.Column="3" Grid.Row="3" Margin="9,9,9,16"
+                 Text="{Binding Contactperson.Phone, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
+            ></TextBox>
+
+        <Label Content="Email:"
+               Grid.Column="2" Grid.Row="4"
+               ></Label>
+
+        <TextBox Name="txbEmail" Validation.ErrorTemplate="{StaticResource ErrorTemplate}"
+            Grid.Column="3" Grid.Row="4" Margin="9,9,9,16"
+               Text="{Binding Contactperson.Email, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
+            ></TextBox>
+
+        <Button Name="btnToevoegen" Content="Toevoegen" Margin="5"
+                Grid.Column="3" Grid.Row="5" Command="{Binding OpslaanCommand}"
+                ></Button>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="40"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="170"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="120"/>
+            <ColumnDefinition Width="170"/>
+        </Grid.ColumnDefinitions>
+
+    </Grid>
+</UserControl>
