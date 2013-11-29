@@ -63,18 +63,27 @@ namespace FestivalProject
         public static ObservableCollection<LineUp> GetLineUp() 
         {
             ObservableCollection<LineUp> lineUps = new ObservableCollection<LineUp>();
+            ObservableCollection<Band> lB = new ObservableCollection<Band>();
+            ObservableCollection<Stage> lS = new ObservableCollection<Stage>();
+
             DbDataReader reader = Database.GetData("SELECT * FROM LineUp");
 
             while (reader.Read()) 
             {
-                LineUp lineUp = Create(reader);
+                int IdBand = int.Parse(reader["Band"].ToString());
+                int IdStage = int.Parse(reader["Stage"].ToString());
+                Band band = Band.GetBandById(lB, IdBand);
+                Stage stage = Stage.GetStageById(lS, IdStage);
+
+
+                LineUp lineUp = Create(reader, band, stage);
                 lineUps.Add(lineUp);
             }
             reader.Close();
             return lineUps;
         }
 
-        private static LineUp Create(IDataRecord record)
+        private static LineUp Create(IDataRecord record, Band band, Stage stage)
         {
             return new LineUp() 
             {
@@ -82,8 +91,8 @@ namespace FestivalProject
                 Date = Convert.ToDateTime(record["Date"].ToString()),
                 From = record["From"].ToString(),
                 Until = record["Until"].ToString(),
-                //Band = (Band)record["Band"],
-                //Stage = (Stage)record["Stage"]
+                Band = band,
+                Stage = stage
             };
         }
         

@@ -94,6 +94,18 @@ private ObservableCollection<Genre> _genres;
             Facebook = record["Facebook"].ToString()
         };
     }
+    public static Band GetBandById(ObservableCollection<Band> l, int IdBand) 
+    {
+        foreach (Band band in l) 
+        {
+            if (band.Id == IdBand.ToString()) 
+            {
+                return band;
+            }
+        }
+        return null;
+    }
+
 
         }
     }

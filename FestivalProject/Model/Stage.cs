@@ -51,6 +51,18 @@ namespace FestivalProject
                 Name = record["Name"].ToString()
             };
         }
-        
+
+        public static Stage GetStageById(ObservableCollection<Stage> l, int IdStage) 
+        {
+            foreach (Stage stage in l) 
+            {
+                if (stage.Id == IdStage.ToString()) 
+                {
+                    return stage;
+                }
+            }
+            return null;
+        }
+
     }
 }
