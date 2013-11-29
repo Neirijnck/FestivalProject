@@ -14,6 +14,7 @@ namespace FestivalProject.ViewModel
             get { return "Overzicht";  }
         }
 
+        //Property voor de geselecteerde stage
         private Stage _selectedStage;
 
         public Stage SelectedStage
@@ -22,6 +23,7 @@ namespace FestivalProject.ViewModel
             set { _selectedStage = value; OnPropertyChanged("SelectedStage"); }
         }
         
+        //Property voor alle stages in te lezen
         private ObservableCollection<Stage> _stages;
 
         public ObservableCollection<Stage> Stages
@@ -30,6 +32,7 @@ namespace FestivalProject.ViewModel
             set { _stages = value; OnPropertyChanged("Stages"); }
         }
 
+        //Constructor
         public LOverzichtVM()
         {
             Stages = Stage.GetStages();

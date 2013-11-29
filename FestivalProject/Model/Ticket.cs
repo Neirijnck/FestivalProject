@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Configuration;
 using System.Data;
 using System.Data.Common;
@@ -11,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace FestivalProject
 {
-    public class Ticket
+    public class Ticket: IDataErrorInfo
     {
         private String _id;
 
@@ -23,6 +25,8 @@ namespace FestivalProject
 
         private String _ticketHolder;
 
+        [Required(ErrorMessage = "Geef een naam op.")]
+        [StringLength(50, MinimumLength = 2, ErrorMessage = "Meer dan 2 karakters nodig.")]
         public String TicketHolder
         {
             get { return _ticketHolder; }
@@ -31,6 +35,8 @@ namespace FestivalProject
 
         private String _ticketHolderEmail;
 
+        [Required(ErrorMessage = "Emailadres is verplicht.")]
+        [RegularExpression(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$", ErrorMessage = "Geef geldig emailadres op.")]
         public String TicketHolderEmail
         {
             get { return _ticketHolderEmail; }
@@ -39,6 +45,7 @@ namespace FestivalProject
 
         private TicketType _ticketType;
 
+        [Required(ErrorMessage = "Kies een type.")]
         public TicketType TicketType
         {
             get { return _ticketType; }
@@ -47,6 +54,8 @@ namespace FestivalProject
 
         private int _amount;
 
+        [Required(ErrorMessage = "Geef een aantal op.")]
+        [Range(1, 20000, ErrorMessage = "Minimum 1 ticket")]
         public int Amount
         {
             get { return _amount; }
@@ -113,7 +122,7 @@ namespace FestivalProject
         public static int EditTicketHolder(Ticket holder)
         {
 
-            String sSQL = "Update Ticket Set TicketHolder=@TicketHolder,TicketHolderEmail=@TicketHolderEmail,TicketType=@TicketType,Amount=@Amount WHERE ID=@ID";
+            String sSQL = "Update Ticket Set TicketHolder=@TicketHolder,TicketHolderEmail=@TicketHolderEmail,Amount=@Amount WHERE ID=@ID";
 
             DbParameter par1 = Database.AddParameter("@Ticketholder", holder.TicketHolder);
             if (par1.Value == null) par1.Value = DBNull.Value;
@@ -121,16 +130,13 @@ namespace FestivalProject
             DbParameter par2 = Database.AddParameter("@TicketHolderEmail", holder.TicketHolderEmail);
             if (par2.Value == null) par2.Value = DBNull.Value;
 
-            DbParameter par3 = Database.AddParameter("@TicketType", holder.TicketType);
-            if (par3.Value == null) par3.Value = DBNull.Value;
-
             DbParameter par4 = Database.AddParameter("@Amount", holder.Amount);
             if (par4.Value == null) par4.Value = DBNull.Value;
 
             DbParameter par5 = Database.AddParameter("@ID", holder.Id);
             if (par5.Value == null) par5.Value = DBNull.Value;
 
-            DbParameter[] pars = new DbParameter[] { par1, par2, par3, par4, par5 };
+            DbParameter[] pars = new DbParameter[] { par1, par2, par4, par5 };
             int affected = Database.ModifyData(sSQL, pars);
 
             return affected;
@@ -156,6 +162,37 @@ namespace FestivalProject
             int affected = Database.ModifyData(sSQL, pars);
 
             return affected;
+        }
+
+
+        public string Error
+        {
+            get { return null; }
+        }
+
+        public string this[string columnName]
+        {
+            get 
+            {
+                try
+                {
+                    object value = this.GetType().GetProperty(columnName).GetValue(this);
+                    Validator.ValidateProperty(value, new ValidationContext(this, null, null)
+                    {
+                        MemberName = columnName
+                    });
+                }
+                catch (ValidationException ex)
+                {
+                    return ex.Message;
+                }
+                return String.Empty;
+            }
+        }
+
+        public bool IsValid()
+        {
+            return Validator.TryValidateObject(this, new ValidationContext(this, null, null), null, true);
         }
 
     }

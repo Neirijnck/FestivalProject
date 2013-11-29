@@ -118,6 +118,24 @@ namespace FestivalProject
             return affected;
         }
 
+        public static int ChangeAvailableTickets(TicketType ticketType, int VerkochteTickets) 
+        {
+            String sSQL = "Update TicketType Set AvailableTickets=@AvailableTickets WHERE ID=@ID";
+
+            int resterendeTickets = ticketType.AvailableTickets - VerkochteTickets;
+
+            DbParameter par1 = Database.AddParameter("@AvailableTickets", resterendeTickets);
+            if (par1.Value == null) par1.Value = DBNull.Value;
+
+            DbParameter par2 = Database.AddParameter("@ID", ticketType.Id);
+            if (par2.Value == null) par2.Value = DBNull.Value;
+
+            DbParameter[] pars = new DbParameter[] { par1, par2 };
+            int affected = Database.ModifyData(sSQL, pars);
+
+            return affected;
+        }
+
         public string Error
         {
             get { return null; }

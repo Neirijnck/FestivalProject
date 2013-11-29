@@ -1,4 +1,5 @@
-﻿using GalaSoft.MvvmLight.Command;
+﻿using FirstFloor.ModernUI.Windows.Controls;
+using GalaSoft.MvvmLight.Command;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -6,6 +7,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace FestivalProject.ViewModel
@@ -98,6 +100,7 @@ namespace FestivalProject.ViewModel
                 if (affected == 1)
                 {
                     Console.WriteLine("Succesvol aangepast in de database!");
+                    ModernDialog.ShowMessage("Het type is aangepast in de database.", "Aanpassen", MessageBoxButton.OK);
                 }
             }
         }

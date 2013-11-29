@@ -1,10 +1,12 @@
-﻿using GalaSoft.MvvmLight.Command;
+﻿using FirstFloor.ModernUI.Windows.Controls;
+using GalaSoft.MvvmLight.Command;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace FestivalProject.ViewModel
@@ -93,6 +95,11 @@ namespace FestivalProject.ViewModel
                 TicketTypes.Add(TicketType);
                 //TicketTypes = TicketType.GetTicketTypes();
                 SelectedTicketType = TicketTypes[index];
+                if (affected == 1) 
+                {
+                    Console.WriteLine("TicketType werd succesvol aangepast in de database.");
+                    ModernDialog.ShowMessage("Het tickettype werd aangepast in de database.", "Aanpassen", MessageBoxButton.OK);
+                }
             }
         }
     }

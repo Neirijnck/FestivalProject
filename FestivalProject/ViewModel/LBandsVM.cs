@@ -9,6 +9,12 @@ namespace FestivalProject.ViewModel
 {
     class LBandsVM:ObservableObject, IPage
     {
+        public string Name
+        {
+            get { return "Bands"; }
+        }
+
+        //Property om de geselecteerde band te bewerken
         private Band _selectedBand;
 
         public Band SelectedBand
@@ -17,10 +23,7 @@ namespace FestivalProject.ViewModel
             set { _selectedBand = value; OnPropertyChanged("SelectedBand"); }
         }
         
-        public string Name
-        {
-            get { return "Bands"; }
-        }
+        //Property om alle bands in te lezen
         private ObservableCollection<Band> _bands;
 
         public ObservableCollection<Band> Bands
@@ -29,6 +32,7 @@ namespace FestivalProject.ViewModel
             set { _bands = value; OnPropertyChanged("Bands"); }
         }
 
+        //Constructor
         public LBandsVM()
         {
             Bands = Band.GetBands();

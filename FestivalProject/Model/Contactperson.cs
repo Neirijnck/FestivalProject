@@ -26,7 +26,7 @@ namespace FestivalProject
         private String _name;
 
         [Required(ErrorMessage = "Geef een naam op.")]
-        [StringLength(50, MinimumLength = 2, ErrorMessage = "De naam moet tussen 2 en 50 karakters liggen.")]
+        [StringLength(50, MinimumLength = 2, ErrorMessage = "Meer dan 2 karakters nodig.")]
         public String Name
         {
             get { return _name; }

@@ -58,7 +58,7 @@
             
         <DataGrid Name="DtGridPersonen" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserResizeRows="False" CanUserAddRows="False"
             Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="4" Grid.Row="1" AutoGenerateColumns="False"
-                  ItemsSource="{Binding Persons}" SelectionUnit="FullRow" SelectedItem="{Binding SelectedContactperson}"
+                  ItemsSource="{Binding Persons, UpdateSourceTrigger=PropertyChanged}" SelectionUnit="FullRow" SelectedItem="{Binding SelectedContactperson, UpdateSourceTrigger=PropertyChanged}"
                   >
 
             <i:Interaction.Triggers>

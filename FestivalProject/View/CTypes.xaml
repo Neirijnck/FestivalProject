@@ -55,7 +55,7 @@
                 ></Button>
 
         <TextBox x:Name="txbType" 
-            Grid.Column="1" Grid.Row="3" Margin="0,15,0,0" Text="{Binding SelectedContactpersonType.Name, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}" Validation.ErrorTemplate="{StaticResource ErrorTemplate }"
+            Grid.Column="1" Grid.Row="3" Margin="0,15,0,0" Text="{Binding SelectedContactpersonType.Name, ValidatesOnDataErrors=True}" Validation.ErrorTemplate="{StaticResource ErrorTemplate }"
             ></TextBox>
 
         <Button Name="btnBewerken" Content="Bewerken" Margin="0,18,0,0" Command="{Binding EditCommand}"

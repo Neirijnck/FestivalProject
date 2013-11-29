@@ -21,6 +21,16 @@
             <Setter Property="VerticalAlignment" Value="Center" />
             <Setter Property="Margin" Value="5" />
         </Style>
+
+        <ControlTemplate x:Key="ErrorTemplate">
+            <StackPanel>
+                <Border BorderBrush="Black" BorderThickness="2">
+                    <AdornedElementPlaceholder/>
+                </Border>
+                <TextBlock Foreground="Black" Text="{Binding [0].ErrorContent}"/>
+            </StackPanel>
+        </ControlTemplate>
+
     </UserControl.Resources>
     
     <Grid Style="{StaticResource ContentRoot}">
@@ -29,24 +39,36 @@
         
         <Label Content="Op naam van: " Grid.Row="1" Grid.Column="0" />
 
-        <TextBox Grid.Row="1" Grid.Column="1" Margin="5" Name="txbName" Text="{Binding TicketHolder.TicketHolder, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBox Grid.Row="1" Grid.Column="1" Margin="10,5,5,15" Name="txbName" 
+                 Text="{Binding TicketHolder.TicketHolder, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
+                 Validation.ErrorTemplate="{StaticResource ErrorTemplate }"
+                 />
         
         <Label Content="Type ticket: "  Grid.Row="2" Grid.Column="0"/>
-        
-        <ComboBox  Grid.Row="2" Grid.Column="1" Margin="5" Name="cboType"
+
+        <ComboBox  Grid.Row="2" Grid.Column="1" Margin="10,5,5,15" Name="cboType"
                    ItemsSource="{Binding TicketTypes}"
                    SelectedItem="{Binding TicketHolder.TicketType, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
-                   DisplayMemberPath="Name"/>
+                   DisplayMemberPath="Name"
+                   Validation.ErrorTemplate="{StaticResource ErrorTemplate }"
+                   />
 
         <Label Content="Email" Grid.Row="3" Grid.Column="0" />
 
-        <TextBox Grid.Row="3" Grid.Column="1" Margin="5" Name="txbEmail" Text="{Binding TicketHolder.TicketHolderEmail, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBox Grid.Row="3" Grid.Column="1" Margin="10,5,5,15" Name="txbEmail" 
+                 Text="{Binding TicketHolder.TicketHolderEmail, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
+                 Validation.ErrorTemplate="{StaticResource ErrorTemplate }"
+                 />
 
         <Label Content="Aantal" Grid.Row="4" Grid.Column="0" />
 
-        <xctk:IntegerUpDown Increment="1" Value="{Binding TicketHolder.Amount, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}" Grid.Row="4" Grid.Column="1" Margin="5" Maximum="10" Minimum="1"/>
+        <xctk:IntegerUpDown Increment="1" 
+                            Value="{Binding TicketHolder.Amount, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}" 
+                            Grid.Row="4" Grid.Column="1" Margin="10,5,5,15" Maximum="10" Minimum="1"
+                            Validation.ErrorTemplate="{StaticResource ErrorTemplate }"
+                            />
 
-        <Button Content="Bestellen" Grid.Row="5" Grid.Column="1" Margin="5" Name="btnBestellen" Command="{Binding AddCommand}"/>
+        <Button Content="Bestellen" Grid.Row="5" Grid.Column="1" Margin="10,5,5,15" Name="btnBestellen" Command="{Binding AddCommand}"/>
         
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="120"/>
@@ -55,11 +77,11 @@
         
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
-            <RowDefinition Height="40"/>
-            <RowDefinition Height="40"/>
-            <RowDefinition Height="40"/>
-            <RowDefinition Height="40"/>
-            <RowDefinition Height="40"/>
+            <RowDefinition Height="45"/>
+            <RowDefinition Height="45"/>
+            <RowDefinition Height="45"/>
+            <RowDefinition Height="45"/>
+            <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
     </Grid>
 </UserControl>

@@ -26,9 +26,9 @@
 
     <Grid Style="{StaticResource ContentRoot}">
 
-        <DataGrid CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserResizeRows="False"
+        <DataGrid x:Name="dtHolders" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserResizeRows="False" CanUserAddRows="False"
             Grid.Row="0" Grid.RowSpan="5" Grid.Column="0" Margin="5" AutoGenerateColumns="False"
-                  ItemsSource="{Binding Holders}" SelectionUnit="FullRow" SelectedItem="{Binding SelectedTicketHolder}"
+                  ItemsSource="{Binding Holders, UpdateSourceTrigger=PropertyChanged}" SelectionUnit="FullRow" SelectedItem="{Binding SelectedTicketHolder, UpdateSourceTrigger=PropertyChanged}"
                   >
 
             <i:Interaction.Triggers>
@@ -45,16 +45,16 @@
             </DataGrid.Columns>
 
         </DataGrid>
-        
-        <Label Content="Aantal bestelde tickets: " Grid.Row="0" Grid.Column="1"/>
-        <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1" Margin="5">
+       
+        <Label Content="Aantal bestelde tickets: " Grid.Row="0" Grid.Column="1"  HorizontalAlignment="Center"/>
+        <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1" Margin="5"  HorizontalAlignment="Center">
         <TextBlock Text="   -   "/>
         <TextBlock IsEnabled="False" Text="{Binding VerkochteTickets, UpdateSourceTrigger=PropertyChanged}"/>
-        <TextBlock Text="   -   "/>
+            <TextBlock Text="   -   "/>
         </StackPanel>
-        <Label Content="Resterende tickets: " Grid.Row="2" Grid.Column="1"/>
-        
-        <Grid Grid.Row="3" Grid.RowSpan="4" Grid.Column="1">
+        <Label Content="Resterende tickets: " Grid.Row="2" Grid.Column="1"  HorizontalAlignment="Center"/>
+
+        <Grid Grid.Row="3" Grid.RowSpan="4" Grid.Column="1"  HorizontalAlignment="Center">
 
             <ListBox ItemsSource="{Binding TicketTypes}" Grid.Column="0" Grid.Row="0" Grid.RowSpan="4" Grid.ColumnSpan="2">
                 <ListBox.ItemTemplate>
@@ -82,7 +82,7 @@
         </Grid>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="400"/>
+            <ColumnDefinition Width="500"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>

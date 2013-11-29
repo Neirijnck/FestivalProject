@@ -14,6 +14,7 @@ namespace FestivalProject.ViewModel
             get { return "Instellingen"; }
         }
 
+        //Property om alle stages in te lezen
         private ObservableCollection<Stage> _stages;
 
         public ObservableCollection<Stage> Stages
@@ -22,6 +23,7 @@ namespace FestivalProject.ViewModel
             set { _stages = value; OnPropertyChanged("Stages"); }
         }
 
+        //Property om alle genres in te lezen
         private ObservableCollection<Genre> _genres;
 
         public ObservableCollection<Genre> Genres
@@ -30,7 +32,7 @@ namespace FestivalProject.ViewModel
             set { _genres = value; OnPropertyChanged("Genres"); }
         }
         
-
+        //Constructor
         public LInstellingenVM()
         {
             Stages = Stage.GetStages();

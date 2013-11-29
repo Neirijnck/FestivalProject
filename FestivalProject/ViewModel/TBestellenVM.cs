@@ -1,4 +1,5 @@
-﻿using GalaSoft.MvvmLight.Command;
+﻿using FirstFloor.ModernUI.Windows.Controls;
+using GalaSoft.MvvmLight.Command;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -17,6 +18,8 @@ namespace FestivalProject.ViewModel
         {
             get { return "Bestellen"; }
         }
+
+        //Property voor alle tickettypes in te lezen
         private ObservableCollection<TicketType> _tickettypes;
 
         public ObservableCollection<TicketType> TicketTypes
@@ -25,6 +28,7 @@ namespace FestivalProject.ViewModel
             set { _tickettypes = value; OnPropertyChanged("TicketTypes"); }
         }
         
+        //Property om alle bestellers van tickets in te lezen
         private ObservableCollection<Ticket> _holders;
 
         public ObservableCollection<Ticket> Holders
@@ -33,6 +37,7 @@ namespace FestivalProject.ViewModel
             set { _holders = value; OnPropertyChanged("Holders");}
         }
 
+        //Property om een nieuwe besteller toe te voegen
         private Ticket _ticketHolder;
 
         public Ticket TicketHolder
@@ -41,6 +46,7 @@ namespace FestivalProject.ViewModel
             set { _ticketHolder = value; OnPropertyChanged("TicketHolder");}
         }
 
+        //Property om de geselecteerde besteller aan te passen
         private Ticket _selectedTicketHolder;
 
         public Ticket SelectedTicketHolder
@@ -49,7 +55,7 @@ namespace FestivalProject.ViewModel
             set { _selectedTicketHolder = value; OnPropertyChanged("SelectedTicketHolder");}
         }
         
-
+        //Property om aantal verkochte tickets op te halen
         private int _verkochteTickets;
 
         public int VerkochteTickets
@@ -58,6 +64,7 @@ namespace FestivalProject.ViewModel
             set { _verkochteTickets = value; OnPropertyChanged("VerkochteTickets"); }
         }
 
+        //Constructor 
         public TBestellenVM()
         {
             Holders = Ticket.GetTicketHolders();
@@ -71,7 +78,7 @@ namespace FestivalProject.ViewModel
         {
             get 
             {
-                return new RelayCommand(AddTicketHolder);
+                return new RelayCommand(AddTicketHolder, TicketHolder.IsValid);
             }
         }
 
@@ -85,11 +92,18 @@ namespace FestivalProject.ViewModel
                 //Holders = Ticket.GetTicketHolders();
                 Holders.Add(TicketHolder);
                 VerkochteTickets = Ticket.GetAmountSoldTickets();
+
+                //aantal beschikbare tickets veranderen
+                int affectedTicket =  TicketType.ChangeAvailableTickets(TicketHolder.TicketType, TicketHolder.Amount);
+                if (affectedTicket == 1) { Console.WriteLine("Aantal beschikbare tickets zijn succesvol aangepast"); }
+
                 int LastIndex = Holders.Count - 1;
                 SelectedTicketHolder = Holders[LastIndex];
-            
-            //opnieuw inlezen van aantal available tickets!!
+
+                ModernDialog.ShowMessage("Uw tickets zijn besteld.", "Bestelling", MessageBoxButton.OK);
+
                 //+ laten verschijnen in datagrid en alles laten aanpassen!
+                //(zie mail henk!!)
             }
            
         }
@@ -115,7 +129,7 @@ namespace FestivalProject.ViewModel
                     Console.WriteLine("Tickethouder werd succesvol aangepast in de database");
                 }
             }
-        }
+        }       
 
     }
 }
