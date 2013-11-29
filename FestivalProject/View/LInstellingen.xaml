@@ -5,6 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:mui="http://firstfloorsoftware.com/ModernUI"
              xmlns:vm="clr-namespace:FestivalProject.ViewModel"
+             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+             xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Extras.WPF45"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     
@@ -45,23 +47,41 @@
                ></Label>
         
         <DatePicker
-            Grid.Column="0" Grid.Row="1" Margin="8" Width="155" Height="28" HorizontalAlignment="Right" SelectedDateChanged="DatePicker_SelectedDateChanged"
-            ></DatePicker>
+            Grid.Column="0" Grid.Row="1" Margin="8" Width="155" Height="28" HorizontalAlignment="Right"
+            SelectedDate="{Binding SelectedStartDate, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+            >
+
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="SelectedDateChanged">
+                    <cmd:EventToCommand Command="{Binding ControlDates}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+
+        </DatePicker>
         
         <Label Content="Eind:"
                Grid.Column="0" Grid.Row="2"
                ></Label>
         
         <DatePicker
-            Grid.Column="0" Grid.Row="2" Margin="8" Width="155" Height="28" HorizontalAlignment="Right" SelectedDateChanged="DatePicker_SelectedDateChanged_1"
-            ></DatePicker>
+            Grid.Column="0" Grid.Row="2" Margin="8" Width="155" Height="28" HorizontalAlignment="Right"
+           SelectedDate="{Binding SelectedEndDate, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+            >
+
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="SelectedDateChanged">
+                    <cmd:EventToCommand Command="{Binding ControlDates}" />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+
+        </DatePicker>
 
         <TextBox Name="txbData" IsEnabled="False"
-                 Grid.Column="0" Grid.Row="3" Margin="1"
+                 Grid.Column="0" Grid.Row="3" Margin="1" Text="{Binding FullDate, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
                  />
         
         <Button Name="btnBevestigen" Content="Bevestigen"
-                Grid.Column="0" Grid.Row="4" Margin="1" Click="btnBevestigen_Click"
+                Grid.Column="0" Grid.Row="4" Margin="1" Command="{Binding OpslaanCommand}"
                 />
 
         <TextBlock Text="Stages"
@@ -77,7 +97,7 @@
                Grid.Column="1" Grid.Row="3"
                ></Label>
 
-        <TextBox Name="txbStage" TextChanged="txbStage_TextChanged"
+        <TextBox Name="txbStage"
             Grid.Column="1" Grid.Row="3" Margin="1"
             ></TextBox>
         
@@ -99,7 +119,7 @@
                ></Label>
 
         <TextBox Name="txbGenre"
-            Grid.Column="2" Grid.Row="3" Margin="1" TextChanged="txbGenre_TextChanged"
+            Grid.Column="2" Grid.Row="3" Margin="1"
             ></TextBox>
 
         <Button Content="Toevoegen" Name="btnGenre"

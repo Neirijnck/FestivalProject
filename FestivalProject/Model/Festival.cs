@@ -2,18 +2,23 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FestivalProject
+namespace FestivalProject 
 {
-    public class Festival
+    public class Festival : IDataErrorInfo
     {
         private DateTime _startDate;
 
+        [DataType(DataType.Date)]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd.MM.yyyy}")] 
+        [Required]
         public DateTime StartDate
         {
             get { return _startDate; }
@@ -22,6 +27,9 @@ namespace FestivalProject
 
         private DateTime _endDate;
 
+        [DataType(DataType.Date)]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd.MM.yyyy}")] 
+        [Required]
         public DateTime EndDate
         {
             get { return _endDate; }
@@ -49,6 +57,53 @@ namespace FestivalProject
                 StartDate = Convert.ToDateTime(record["StartDate"].ToString()),
                 EndDate = Convert.ToDateTime(record["EndDate"].ToString())
             };
+        }
+
+        public static int AddFestival(Festival festivaldata) 
+        {
+            String sSQL = "INSERT INTO Festival(StartDate, EndDate) VALUES(@StartDate, @EndDate)";
+
+            DbParameter par1 = Database.AddParameter("@StartDate", festivaldata.StartDate);
+            if (par1.Value == null) par1.Value = DBNull.Value;
+
+            DbParameter par2 = Database.AddParameter("@EndDate", festivaldata.EndDate);
+            if (par2.Value == null) par2.Value = DBNull.Value;
+
+            DbParameter[] pars = new DbParameter[] { par1, par2 };
+            int affected = Database.ModifyData(sSQL, pars);
+
+            return affected;
+        }
+
+
+        public string Error
+        {
+            get { return null; }
+        }
+
+        public string this[string columnName]
+        {
+            get 
+            {
+                try
+                {
+                    object value = this.GetType().GetProperty(columnName).GetValue(this);
+                    Validator.ValidateProperty(value, new ValidationContext(this, null, null)
+                    {
+                        MemberName = columnName
+                    });
+                }
+                catch (ValidationException ex)
+                {
+                    return ex.Message;
+                }
+                return String.Empty;
+            }
+        }
+
+        public bool IsValid()
+        {
+            return Validator.TryValidateObject(this, new ValidationContext(this, null, null), null, true);
         }
 
     }
