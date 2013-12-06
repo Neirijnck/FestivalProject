@@ -149,6 +149,8 @@ namespace FestivalProject.ViewModel
         {
             String Search = txt.Text;
             //zoeken in datagrid
+            int affected = Contactperson.SearchContacts(Search);
+            Console.WriteLine(affected);
         }
 
 

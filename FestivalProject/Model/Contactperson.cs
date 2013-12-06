@@ -183,5 +183,25 @@ namespace FestivalProject
         {
             return Validator.TryValidateObject(this, new ValidationContext(this, null, null), null, true);
         }
+
+        public static int SearchContacts(String Searchtext) 
+        {
+            String sSQL = "SELECT * FROM Contactperson WHERE Name=@Searchtext UNION ALL SELECT * FROM Contactperson WHERE Email=@Searchtext2 UNION ALL SELECT * FROM Contactperson WHERE Phone=@Searchtext3";
+
+            DbParameter par1 = Database.AddParameter("@Searchtext", Searchtext);
+            if (par1.Value == null) par1.Value = DBNull.Value;
+
+            DbParameter par2 = Database.AddParameter("@Searchtext2", Searchtext);
+            if (par2.Value == null) par2.Value = DBNull.Value;
+
+            DbParameter par3 = Database.AddParameter("@Searchtext3", Searchtext);
+            if (par3.Value == null) par3.Value = DBNull.Value;
+
+            DbParameter[] pars = new DbParameter[] { par1};
+            int affected = Database.ModifyData(sSQL, pars);
+
+            return affected;
+        }
+
     }
 }

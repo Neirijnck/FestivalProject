@@ -52,6 +52,7 @@
         <TextBox Margin="5" Grid.Row="4" Grid.Column="1" Name="txbTwit"/>
 
         <Button Content="Opslaan" Margin="5" Name="btnOpslaan"
+                Command="{Binding AddCommand}"
                 Grid.Column="1" Grid.Row="6"
                 />
 

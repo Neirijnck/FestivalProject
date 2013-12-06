@@ -80,7 +80,24 @@ namespace FestivalProject.ViewModel
             get { return _fullDate; }
             set { _fullDate = value; OnPropertyChanged("FullDate"); }
         }
-        
+
+        //Property om nieuwe stage toe te voegen
+        private Stage _newStage;
+
+        public Stage NewStage
+        {
+            get { return _newStage; }
+            set { _newStage = value; OnPropertyChanged("NewStage"); }
+        }    
+    
+        //Property om nieuw genre toe te voegen
+        private Genre _newGenre;
+
+        public Genre NewGenre
+        {
+            get { return _newGenre; }
+            set { _newGenre = value; OnPropertyChanged("NewGenre"); }
+        }
 
         //Constructor
         public LInstellingenVM()
@@ -89,10 +106,96 @@ namespace FestivalProject.ViewModel
             Stages = Stage.GetStages();
             Genres = Genre.GetGenres();
             FestivalData = new Festival();
+            NewStage = new Stage();
+            NewGenre = new Genre();
+        }
+
+        //Command om Genre aan te passen
+        public ICommand EditGenreCommand 
+        {
+            get 
+            {
+                return new RelayCommand<SelectionChangedEventArgs>(EditGenre);
+            }
+        }
+
+        //Method om genre aan te passen
+        private void EditGenre(SelectionChangedEventArgs e) 
+        {
+            if (e.RemovedItems.Count > 0)
+            {
+                Genre genre = e.RemovedItems[0] as Genre;
+                int affected = Genre.EditGenre(genre);
+                if (affected == 1)
+                {
+                    Console.WriteLine("Genre werd succesvol aangepast in de database");
+                }
+            }
+        }
+
+        //Command om Genre toe te voegen
+        public ICommand OpslaanGenreCommand 
+        {
+            get 
+            {
+                return new RelayCommand(AddGenre, NewGenre.IsValid);
+            }
+        }
+
+        //Method om genre toe te voegen
+        private void AddGenre() 
+        {
+            int affected = Genre.AddGenre(NewGenre);
+            if (affected == 1)
+            {
+                Genres.Add(NewGenre);
+            }
+        }
+
+        //Command om Stage toe te voegen in database
+        public ICommand OpslaanStageCommand 
+        {
+            get 
+            {
+                return new RelayCommand(AddStage, NewStage.IsValid);
+            }
+        }
+
+        //Method om stage toe te voegen
+        private void AddStage() 
+        {
+            int affected = Stage.AddStage(NewStage);
+            if (affected == 1) 
+            {
+                Stages.Add(NewStage);
+            }
+        }
+
+        //Command om stage te bewerken
+        public ICommand EditStageCommand
+        {
+            get
+            {
+                return new RelayCommand<SelectionChangedEventArgs>(EditStage);
+            }
+        }
+
+        //Method om stage te bewerken
+        private void EditStage(SelectionChangedEventArgs e) 
+        {
+            if (e.RemovedItems.Count > 0)
+            {
+                Stage stage = e.RemovedItems[0] as Stage;
+                int affected = Stage.EditStage(stage);
+                if (affected == 1)
+                {
+                    Console.WriteLine("Stage werd succesvol aangepast in de database");
+                }
+            }
         }
 
         //Command om data toe te voegen in database
-        public ICommand OpslaanCommand 
+        public ICommand OpslaanDataCommand 
         {
             get 
             {

@@ -15,7 +15,16 @@
     </UserControl.DataContext>
 
     <UserControl.Resources>
-        
+
+        <ControlTemplate x:Key="ErrorTemplate">
+            <StackPanel>
+                <Border BorderBrush="Black" BorderThickness="2">
+                    <AdornedElementPlaceholder/>
+                </Border>
+                <TextBlock Foreground="Black" Text="{Binding [0].ErrorContent}"/>
+            </StackPanel>
+        </ControlTemplate>
+
         <DataTemplate x:Key="EditableListBoxTemplateStage">
             <StackPanel>
                 <TextBox Text="{Binding Name}" Background="#F6F6F6" BorderThickness="0"/>
@@ -77,11 +86,11 @@
         </DatePicker>
 
         <TextBox Name="txbData" IsEnabled="False"
-                 Grid.Column="0" Grid.Row="3" Margin="1" Text="{Binding FullDate, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                 Grid.Column="0" Grid.Row="3" Margin="4 1 4 20" Text="{Binding FullDate, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
                  />
         
         <Button Name="btnBevestigen" Content="Bevestigen"
-                Grid.Column="0" Grid.Row="4" Margin="1" Command="{Binding OpslaanCommand}"
+                Grid.Column="0" Grid.Row="4" Margin="4 1 4 1" Command="{Binding OpslaanDataCommand}"
                 />
 
         <TextBlock Text="Stages"
@@ -91,18 +100,29 @@
         <ListBox 
             Grid.Column="1" Grid.RowSpan="2" Grid.Row="1" Margin="1"
             ItemsSource="{Binding Stages}" ItemTemplate="{StaticResource EditableListBoxTemplateStage}"
-            ></ListBox>
+            >
+            
+             <i:Interaction.Triggers>
+            <i:EventTrigger EventName="SelectionChanged">
+                <cmd:EventToCommand Command="{Binding EditStageCommand}" PassEventArgsToCommand="True"/>
+            </i:EventTrigger>
+            </i:Interaction.Triggers>
+
+            </ListBox>
         
         <Label Content="Nieuw:"
                Grid.Column="1" Grid.Row="3"
                ></Label>
 
         <TextBox Name="txbStage"
-            Grid.Column="1" Grid.Row="3" Margin="1"
+            Grid.Column="1" Grid.Row="3" Margin="4 1 4 20"
+                 Validation.ErrorTemplate="{StaticResource ErrorTemplate}"
+                 Text="{Binding NewStage.Name, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
             ></TextBox>
         
         <Button Content="Toevoegen" Name="btnStage"
-                Grid.Column="1" Grid.Row="4" Margin="1"
+                Grid.Column="1" Grid.Row="4" Margin="4 1 4 1"
+                Command="{Binding OpslaanStageCommand}"
                 ></Button>
 
         <TextBlock Text="Genres"
@@ -112,25 +132,36 @@
         <ListBox
             Grid.Column="2" Grid.RowSpan="2" Grid.Row="1" Margin="1"
             ItemsSource="{Binding Genres}" ItemTemplate="{StaticResource EditableListBoxTemplateGenre}"
-            ></ListBox>
+            >
+
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="SelectionChanged">
+                    <cmd:EventToCommand Command="{Binding EditGenreCommand}" PassEventArgsToCommand="True"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+
+        </ListBox>
 
         <Label Content="Nieuw:"
                Grid.Column="2" Grid.Row="3"
                ></Label>
 
         <TextBox Name="txbGenre"
-            Grid.Column="2" Grid.Row="3" Margin="1"
+            Grid.Column="2" Grid.Row="3" Margin="4 1 4 20"
+                 Validation.ErrorTemplate="{StaticResource ErrorTemplate}"
+                 Text="{Binding NewGenre.Name, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
             ></TextBox>
 
         <Button Content="Toevoegen" Name="btnGenre"
-                Grid.Column="2" Grid.Row="4" Margin="1"
+                Grid.Column="2" Grid.Row="4" Margin="4 1 4 1"
+                Command="{Binding OpslaanGenreCommand}"
                 ></Button>
 
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
             <RowDefinition Height="83"/>
             <RowDefinition Height="83"/>
-            <RowDefinition Height="30"/>
+            <RowDefinition Height="50"/>
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
