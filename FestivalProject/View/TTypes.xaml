@@ -40,8 +40,32 @@
         <ListBox Name="lstTypes"
             Grid.Row="1" Grid.RowSpan="3" Grid.Column="0" Margin="8"
              ItemsSource="{Binding TicketTypes}"
-            DisplayMemberPath="Name"
+            DisplayMemberPath="Name" SelectedItem="{Binding SelectedTicketType}"
             />
+        <StackPanel Orientation="Vertical" Grid.Row="4" Grid.RowSpan="2" Grid.Column="0">
+        <StackPanel Orientation="Horizontal"  >
+            <Label Content="Type:"></Label>
+            <TextBox Height="32" Width="110" Margin="10" Name="txbBewerkType" Text="{Binding SelectedTicketType.Name, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
+                     Validation.ErrorTemplate="{StaticResource ErrorTemplate }"
+                     ></TextBox>
+   
+                <Label Content="Prijs:"></Label>
+                <xctk:DoubleUpDown Width="100" Height="32" Minimum="0" Increment="5" FormatString="C2" Margin="10" Name="txbBewerkPrijs" Watermark="Prijs"
+                               Value="{Binding SelectedTicketType.Price, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
+                                   Validation.ErrorTemplate="{StaticResource ErrorTemplate }"
+                                   />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Aantal:"></Label>
+                <xctk:IntegerUpDown Width="100" Height="32" Margin="10,10,10,10" Name="txbBewerkAantal" Increment="10" Minimum="10" Watermark="Aantal Tickets"
+                                Value="{Binding SelectedTicketType.AvailableTickets, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
+                                    Validation.ErrorTemplate="{StaticResource ErrorTemplate }"/>
+
+                <Button Width="140" Height="32" Content="Bewerken" Name="btnBewerken" Margin="8"
+                    Command="{Binding EditCommand}"
+                />
+            </StackPanel>
+            </StackPanel>
         
         <TextBlock Text="Nieuw type ticket toevoegen:"
                    Grid.Row="0" Grid.Column="1"
@@ -71,10 +95,6 @@
             
             <Button Name="btnToevoegen" Content="Toevoegen" Grid.Row="3" Grid.Column="1" Margin="8" Command="{Binding OpslaanCommand}"/>
 
-            <Button Content="Bewerken" Name="btnBewerken"
-                Grid.Row="4" Grid.Column="1" Margin="8"
-                    Command="{Binding EditCommand}"
-                />
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="50"/>

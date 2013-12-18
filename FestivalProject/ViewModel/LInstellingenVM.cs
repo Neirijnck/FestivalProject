@@ -175,6 +175,7 @@ namespace FestivalProject.ViewModel
             if (affected == 1)
             {
                 Genres.Add(NewGenre);
+                NewGenre = new Genre();
                 int LastIndex = Genres.Count - 1;
                 SelectedGenre = Genres[LastIndex];
             }
@@ -196,6 +197,7 @@ namespace FestivalProject.ViewModel
             if (affected == 1) 
             {
                 Stages.Add(NewStage);
+                NewStage = new Stage();
                 int LastIndex = Stages.Count - 1;
                 SelectedStage = Stages[LastIndex];
             }

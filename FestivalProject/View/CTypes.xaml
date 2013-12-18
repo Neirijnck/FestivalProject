@@ -54,7 +54,7 @@
                 Grid.Column="1" Grid.Row="2"
                 ></Button>
 
-        <TextBox x:Name="txbType" 
+        <TextBox Name="txbType"
             Grid.Column="1" Grid.Row="3" Margin="0,15,0,0" Text="{Binding SelectedContactpersonType.Name, ValidatesOnDataErrors=True}" Validation.ErrorTemplate="{StaticResource ErrorTemplate }"
             ></TextBox>
 

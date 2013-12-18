@@ -72,6 +72,7 @@ namespace FestivalProject.ViewModel
             {
                 ContactpersonTypes.Add(ContactpersonType);
                 //ContactpersonTypes = ContactpersonType.GetContactpersonTypes();
+                ContactpersonType = new ContactpersonType();
                 int LastIndex = ContactpersonTypes.Count - 1;
                 SelectedContactpersonType = ContactpersonTypes[LastIndex];
             }

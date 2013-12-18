@@ -23,6 +23,42 @@ namespace FestivalProject.View
         public TTypes()
         {
             InitializeComponent();
+            this.Loaded += TTypes_Loaded;
+            txbBewerkType.TextChanged += txbBewerkType_TextChanged;
+            txbBewerkPrijs.ValueChanged += txbBewerkPrijs_ValueChanged;
+            txbBewerkAantal.ValueChanged += txbBewerkAantal_ValueChanged;
+        }
+
+        void txbBewerkAantal_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            EnableDisableControls();
+        }
+
+        private void EnableDisableControls()
+        {
+            if (txbBewerkType.Text != "" && txbBewerkType.Text.Length >= 2 && txbBewerkPrijs.Value != null && txbBewerkAantal.Text != "")
+            {
+                btnBewerken.IsEnabled = true;
+            }
+            else 
+            {
+                btnBewerken.IsEnabled = false;
+            }
+        }
+
+        void txbBewerkPrijs_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            EnableDisableControls();
+        }
+
+        void txbBewerkType_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            EnableDisableControls();
+        }
+
+        void TTypes_Loaded(object sender, RoutedEventArgs e)
+        {
+            EnableDisableControls();
         }
     }
 }

@@ -238,6 +238,7 @@ namespace FestivalProject.ViewModel
                 if (affected == 1)
                 {
                     LineUps.Add(NewLineUp);
+                    NewLineUp = new LineUp();
                     int LastIndex = Bands.Count - 1;
                     SelectedBand = Bands[LastIndex];
                     Console.WriteLine("Line up werd succesvol toegevoegd in de database.");

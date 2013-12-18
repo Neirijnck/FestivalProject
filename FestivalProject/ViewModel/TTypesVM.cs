@@ -71,6 +71,7 @@ namespace FestivalProject.ViewModel
             {
                 TicketTypes.Add(TicketType);
                 //TicketTypes = TicketType.GetTicketTypes();
+                TicketType = new TicketType();
                 int LastIndex = TicketTypes.Count - 1;
                 SelectedTicketType = TicketTypes[LastIndex];
             }
@@ -92,7 +93,6 @@ namespace FestivalProject.ViewModel
             {
                 int affected = TicketType.EditTicketType(SelectedTicketType);
                 int index = TicketTypes.IndexOf(SelectedTicketType);
-                TicketTypes.Add(TicketType);
                 //TicketTypes = TicketType.GetTicketTypes();
                 SelectedTicketType = TicketTypes[index];
                 if (affected == 1) 
