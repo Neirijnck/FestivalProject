@@ -1,11 +1,15 @@
-﻿using GalaSoft.MvvmLight.Command;
+﻿using FirstFloor.ModernUI.Windows.Controls;
+using GalaSoft.MvvmLight.Command;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
@@ -43,21 +47,98 @@ namespace FestivalProject.ViewModel
             get { return _newBand; }
             set { _newBand = value; OnPropertyChanged("NewBand"); }
         }
+
+        //Property om alle genres in te lezen
+        private ObservableCollection<Genre> _genres;
+
+        public ObservableCollection<Genre> Genres
+        {
+            get { return _genres; }
+            set { _genres = value; OnPropertyChanged("Genres"); }
+        }
+
+        //Property om het pad weer te geven in de applicatie
+        private String _naamAfbeelding;
+
+        public String NaamAfbeelding
+        {
+            get { return _naamAfbeelding; }
+            set { _naamAfbeelding = value; OnPropertyChanged("NaamAfbeelding"); }
+        }
         
+
+        //Property om nieuwe afbeelding toe te voegen
+        private String _picturePath;
+
+        public String PicturePath
+        {
+            get { return _picturePath; }
+            set { _picturePath = value; OnPropertyChanged("PicturePath"); }
+        }
+
+        //Property selected Genres
+        private ObservableCollection<Genre> _selectedGenres;
+
+        public ObservableCollection<Genre> SelectedGenres
+        {
+            get { return _selectedGenres; }
+            set { _selectedGenres = value; OnPropertyChanged("SelectedGenres");}
+        }
 
         //Constructor
         public LBandsVM()
         {
             Bands = Band.GetBands();
+            Genres = Genre.GetGenres();
             SelectedBand = Bands[0];
             NewBand = new Band();
+            SelectedGenres = new ObservableCollection<Genre>();
         }
 
+        //Command om aangevinkte genres toe te voegen aan de list
+        public ICommand AddGenreToListCommand
+        {
+            get
+            {
+                return new RelayCommand<CheckBox>(AddGenreToList);
+            }
+        }
+
+        //Method om genres te adden aan de list
+        private void AddGenreToList(CheckBox chk)
+        {
+            if (chk.IsChecked == true) 
+            {
+                Genre genre = new Genre();
+                genre.Name = Convert.ToString(chk.Content);
+                SelectedGenres.Add(genre);
+            }
+        }
+
+        //Command om aangevinkte genres te verwijderen van de list
+        public ICommand RemoveGenreFromListCommand
+        {
+            get
+            {
+                return new RelayCommand<CheckBox>(RemoveGenreFromList);
+            }
+        }
+
+        //Method om genres te verwijderen van de list
+        private void RemoveGenreFromList(CheckBox chk)
+        {
+            if (chk.IsChecked == false) 
+            {
+                Genre genre = new Genre();
+                genre.Name = Convert.ToString(chk.Content);
+                SelectedGenres.Remove(genre);
+            }
+        }
         public ICommand AddCommand 
         {
             get 
             {
-                return new RelayCommand(AddBand);
+                return new RelayCommand(AddBand, NewBand.IsValid);
             }
         }
 
@@ -79,13 +160,85 @@ namespace FestivalProject.ViewModel
 
             //NewBand.PictureByte = buffer;
 
+            PicturePath = PicturePath.Replace(@"\", @"/");
+            NewBand.Picture = PicturePath;
+            NewBand.Genres = SelectedGenres;
             int affected = Band.AddBand(NewBand);
             if (affected == 1)
             {
                 Bands.Add(NewBand);
+                OnPropertyChanged("Bands");
                 int LastIndex = Bands.Count - 1;
                 SelectedBand = Bands[LastIndex];
+                Console.WriteLine("Band werd succesvol toegevoegd in de database.");
+                ModernDialog.ShowMessage("De band/artiest werd toegevoegd.", "Toevoegen", MessageBoxButton.OK);
             }
+        }
+
+        //Command om band te bewerken
+        public ICommand EditBandCommand 
+        {
+            get 
+            {
+                return new RelayCommand(EditBand);
+            }
+        }
+
+        //Method om band te bewerken
+        private void EditBand()
+        {
+            if (SelectedBand.Id != null)
+            {
+                if (PicturePath != null)
+                {
+                    PicturePath = PicturePath.Replace(@"\", @"/");
+                    SelectedBand.Picture = PicturePath;
+                }
+                int affected = Band.EditBand(SelectedBand);
+                if (affected == 1)
+                {
+                    Console.WriteLine("Band werd succesvol aangepast in de database.");
+                    ModernDialog.ShowMessage("De band/artiest werd aangepast in de database.", "Aanpassen", MessageBoxButton.OK);
+                }
+            }
+        }
+
+        //Command om nieuwe afbeelding toe te voegen
+        public ICommand AddPictureCommand 
+        {
+            get 
+            {
+                return new RelayCommand(AddPicture);
+            }
+        }
+
+        //Method om picture toe te voegen
+        private void AddPicture() 
+        {
+            OpenFileDialog ofd = new OpenFileDialog();
+            //ofd.InitialDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            ofd.Filter = "JPEG |*.jpg;*.jpeg";
+            ofd.Title = "Kies een afbeelding";
+
+
+            if (ofd.ShowDialog() == true)
+            {
+                NaamAfbeelding = System.IO.Path.GetFileName(ofd.FileName);
+                PicturePath = "..\\Assets\\" + NaamAfbeelding;
+                try
+                {
+                    if (File.Exists(ofd.FileName) == true)
+                    {
+                        File.Copy(ofd.FileName, AppDomain.CurrentDomain.BaseDirectory + "..\\" + PicturePath);
+                    }
+                }
+                catch (IOException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+
+            }
+
         }
     }
 }

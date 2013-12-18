@@ -16,7 +16,7 @@ namespace FestivalProject
     {
         private DateTime _startDate;
 
-        [DataType(DataType.Date)]
+        [DataType(DataType.DateTime)]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd.MM.yyyy}")] 
         [Required]
         public DateTime StartDate
@@ -27,13 +27,37 @@ namespace FestivalProject
 
         private DateTime _endDate;
 
-        [DataType(DataType.Date)]
+        [DataType(DataType.DateTime)]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd.MM.yyyy}")] 
         [Required]
         public DateTime EndDate
         {
             get { return _endDate; }
             set { _endDate = value; }
+        }
+
+        public static DateTime? GetStartDate() 
+        {
+            DbDataReader reader = Database.GetData("SELECT StartDate FROM Festival");
+            while (reader.Read()) 
+            {
+                DateTime start = Convert.ToDateTime(reader["StartDate"]);
+                return start;
+            }
+            reader.Close();
+            return null;
+        }
+
+        public static DateTime? GetEndDate()
+        {
+            DbDataReader reader = Database.GetData("SELECT EndDate FROM Festival");
+            while (reader.Read())
+            {
+                DateTime end = Convert.ToDateTime(reader["EndDate"]);
+                return end;
+            }
+            reader.Close();
+            return null;
         }
 
         public static ObservableCollection<Festival> GetFestivals() 
@@ -57,6 +81,22 @@ namespace FestivalProject
                 StartDate = Convert.ToDateTime(record["StartDate"].ToString()),
                 EndDate = Convert.ToDateTime(record["EndDate"].ToString())
             };
+        }
+
+        public static int EditFestival(Festival festivaldata) 
+        {
+            String sSQL = "Update Festival Set StartDate=@StartDate, EndDate=@EndDate ";
+
+            DbParameter par1 = Database.AddParameter("@StartDate", festivaldata.StartDate);
+            if (par1.Value == null) par1.Value = DBNull.Value;
+
+            DbParameter par2 = Database.AddParameter("@EndDate", festivaldata.EndDate);
+            if (par2.Value == null) par2.Value = DBNull.Value;
+
+            DbParameter[] pars = new DbParameter[] { par1, par2 };
+            int affected = Database.ModifyData(sSQL, pars);
+
+            return affected;
         }
 
         public static int AddFestival(Festival festivaldata) 

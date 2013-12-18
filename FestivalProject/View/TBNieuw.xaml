@@ -7,11 +7,11 @@
              xmlns:vm="clr-namespace:FestivalProject.ViewModel"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="350" d:DesignWidth="300">
 
-    <UserControl.DataContext>
+    <!--<UserControl.DataContext>
         <vm:TBestellenVM/>
-    </UserControl.DataContext>
+    </UserControl.DataContext>-->
     
     <UserControl.Resources>
         <Style TargetType="{x:Type Label}">
@@ -68,8 +68,9 @@
                             Validation.ErrorTemplate="{StaticResource ErrorTemplate }"
                             />
 
-        <Button Content="Bestellen" Grid.Row="5" Grid.Column="1" Margin="10,5,5,15" Name="btnBestellen" Command="{Binding AddCommand}"/>
-        
+        <Button Content="Bestellen" Grid.Row="5" Grid.Column="1" Height="32px" Margin="10,5,5,5" Name="btnBestellen" Command="{Binding AddCommand}"/>
+        <Button Content="Printen tickets" Grid.Row="6" Grid.Column="1" Height="32px" Margin="10,5,5,5" Command="{Binding PrintCommand}"/>
+
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="120"/>
             <ColumnDefinition Width="*"/>
@@ -81,7 +82,8 @@
             <RowDefinition Height="45"/>
             <RowDefinition Height="45"/>
             <RowDefinition Height="45"/>
-            <RowDefinition Height="50"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
     </Grid>
 </UserControl>

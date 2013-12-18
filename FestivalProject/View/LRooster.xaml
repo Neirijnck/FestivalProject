@@ -5,13 +5,27 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:mui="http://firstfloorsoftware.com/ModernUI"
              xmlns:vm="clr-namespace:FestivalProject.ViewModel"
+             xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Extras.WPF45"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"      
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
+    
     <UserControl.DataContext>
         <vm:LRoosterVM/>
     </UserControl.DataContext>
 
     <UserControl.Resources>
+
+        <ControlTemplate x:Key="ErrorTemplate">
+            <StackPanel>
+                <Border BorderBrush="Black" BorderThickness="2">
+                    <AdornedElementPlaceholder/>
+                </Border>
+                <TextBlock Foreground="Black" Text="{Binding [0].ErrorContent}"/>
+            </StackPanel>
+        </ControlTemplate>
+
         <Style TargetType="{x:Type TextBlock}">
             <Setter Property="VerticalAlignment" Value="Center" />
             <Setter Property="HorizontalAlignment" Value="Center" />
@@ -23,34 +37,88 @@
         <TextBlock Text="Selecteer dag:"
                    Grid.Row="0" Grid.Column="0"
                    />
-        <ComboBox Name="cboDag"
-            Grid.Row="1" Grid.Column="0" Margin="8"
-            />
+        <ListBox Name="lstDag" ItemsSource="{Binding Dagen, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" ItemStringFormat="{}{0:dd/MM/yyyy}"
+            Grid.Row="1" Grid.RowSpan="2" Grid.Column="0" Margin="8" SelectedItem="{Binding SelectedDay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}">
+
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="SelectionChanged">
+                    <cmd:EventToCommand Command="{Binding ToonLineUpCommand}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+
+        </ListBox>
+        
         <TextBlock Text="Selecteer stage:"
-                   Grid.Row="2" Grid.Column="0" 
+                   Grid.Row="3" Grid.Column="0" 
                    />
-        <ComboBox Name="cboStage"
-            Grid.Row="3" Grid.Column="0" Margin="8"
-            />
+
+        <ComboBox Name="cboStage" ItemsSource="{Binding Stages, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" DisplayMemberPath="Name"
+            Grid.Row="4" Grid.Column="0" Margin="8" SelectedItem="{Binding SelectedStage, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}">
+            
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="SelectionChanged">
+                    <cmd:EventToCommand Command="{Binding ToonLineUpCommand}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+            
+        </ComboBox>
+        
         <ListBox
             Grid.Row="0" Grid.Column="1" Margin="8"
             Grid.RowSpan="5"
-            
-            />
+            ItemsSource="{Binding LineUps, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" SelectedItem="{Binding SelectedLineUp, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}">
+            <ListBox.ItemTemplate>
+            <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding From}"></TextBlock>
+                        <TextBlock Text="     -     "></TextBlock>
+                        <TextBlock Text="{Binding Until}"></TextBlock>
+                        <TextBlock Text=":     "></TextBlock>
+                        <TextBlock Text="{Binding Band.Name}"></TextBlock>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="SelectionChanged">
+                    <cmd:EventToCommand Command="{Binding BindGeselecteerdeBand}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+
+        </ListBox>
+        
+        <Grid Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3">
+
+            <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.ColumnSpan="2">
+            <TextBlock Text="Optreden toevoegen:"></TextBlock>
+
+                <xctk:TimePicker Validation.ErrorTemplate="{StaticResource ErrorTemplate}" Margin="5px" Width="120px" TimeInterval="0:15" Height="32px" Format="ShortTime" Value="{Binding HourFrom, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"></xctk:TimePicker>
+                <xctk:TimePicker Validation.ErrorTemplate="{StaticResource ErrorTemplate}" Margin="5px" Width="120px" TimeInterval="0:15" Height="32px" Format="ShortTime" Value="{Binding HourUntil, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"></xctk:TimePicker>
+                <ComboBox Validation.ErrorTemplate="{StaticResource ErrorTemplate}" SelectedItem="{Binding NewLineUp.Band, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Height="32px" Width="150px" Margin="5px" ItemsSource="{Binding Bands}" DisplayMemberPath="Name"></ComboBox>
+                <Button Content="Toevoegen" Width="95px" Height="32px" Margin="5px" Command="{Binding SaveLineUpCommand}"></Button>
+            </StackPanel>
+                
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+        </Grid>
+        
         <TextBlock Text="Kies of wijzig geselecteerde band:"
                    Grid.Row="0" Grid.Column="2"
                    />
         <ComboBox Name="cboBand"
             Grid.Row="1" Grid.Column="2" Margin="8"
+                  ItemsSource="{Binding Bands, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" DisplayMemberPath="Name"
             />
-        <Button Content="Opslaan" Name="btnOpslaan"
-                Grid.Row="2" Grid.Column="2" Margin="8"
+        <Button Content="Wijzigen" Name="btnOpslaan"
+                Grid.Row="2" Grid.Column="2" Margin="8" Command="{Binding EditLineUpCommand}"
                 />
-        <Button Content="Verwijderen" Name="btnVerwijderen"
+        <Button Content="Verwijderen" Name="btnVerwijderen" Command="{Binding DeleteLineUpCommand}"
                 Grid.Row="3" Grid.Column="2" Margin="8"
                 />
         
         <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
             <RowDefinition Height="50"/>
             <RowDefinition Height="50"/>
             <RowDefinition Height="50"/>

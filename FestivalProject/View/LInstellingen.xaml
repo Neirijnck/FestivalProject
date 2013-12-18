@@ -99,7 +99,7 @@
 
         <ListBox 
             Grid.Column="1" Grid.RowSpan="2" Grid.Row="1" Margin="1"
-            ItemsSource="{Binding Stages}" ItemTemplate="{StaticResource EditableListBoxTemplateStage}"
+            ItemsSource="{Binding Stages}" ItemTemplate="{StaticResource EditableListBoxTemplateStage}" SelectedItem="{Binding SelectedStage}"
             >
             
              <i:Interaction.Triggers>
@@ -131,7 +131,7 @@
 
         <ListBox
             Grid.Column="2" Grid.RowSpan="2" Grid.Row="1" Margin="1"
-            ItemsSource="{Binding Genres}" ItemTemplate="{StaticResource EditableListBoxTemplateGenre}"
+            ItemsSource="{Binding Genres}" ItemTemplate="{StaticResource EditableListBoxTemplateGenre}" SelectedItem="{Binding SelectedGenre}"
             >
 
             <i:Interaction.Triggers>

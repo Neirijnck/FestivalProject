@@ -55,7 +55,7 @@ namespace FestivalProject
         private String _phone;
 
         [Required(ErrorMessage = "Telefoonnr. is verplicht.")]
-        [RegularExpression(@"(?-imsx:(?:\d{3}[/. ]?(?:(?:\d\d([. ]?)\d\d\1\d\d)|(?:\d{3}\x20\d{3})))|(?:\d\d[ /]\d{3}(?:\x20\d\d){2})|(?:04\d\d[/ ](?:\d{3}\x20\d{3}|(?:\d\d[. ]){2}\d\d)))", ErrorMessage = "Geef geldig telefoonnr. op.")]
+        [RegularExpression(@"( |^|>)((((\+|00)3[12] ?(\(0\))?)|0)([0-9]{2}-? ?[0-9]{7})|([0-9]{3}-? ?[0-9]{6})|([0-9]{1}-? ?[0-9]{8}))( |$|<)", ErrorMessage = "Geef geldig telefoonnr. op.")]
         public String Phone
         {
             get { return _phone; }
@@ -184,23 +184,18 @@ namespace FestivalProject
             return Validator.TryValidateObject(this, new ValidationContext(this, null, null), null, true);
         }
 
-        public static int SearchContacts(String Searchtext) 
+        public static ObservableCollection<Contactperson> GetContactsByString(ObservableCollection<Contactperson> contacts, String search)
         {
-            String sSQL = "SELECT * FROM Contactperson WHERE Name=@Searchtext UNION ALL SELECT * FROM Contactperson WHERE Email=@Searchtext2 UNION ALL SELECT * FROM Contactperson WHERE Phone=@Searchtext3";
+            ObservableCollection<Contactperson> ListFoundContacts = new ObservableCollection<Contactperson>();
+            foreach (Contactperson contact in contacts)
+            {
+                if (contact.Name.ToUpper().Contains(search.ToUpper()) || contact.Email.ToUpper().Contains(search.ToUpper()) || contact.Phone.ToUpper().Contains(search.ToUpper()) || contact.JobRole.Name.ToUpper().Contains(search.ToUpper()))
+                {
+                    ListFoundContacts.Add(contact);
+                }
+            }
 
-            DbParameter par1 = Database.AddParameter("@Searchtext", Searchtext);
-            if (par1.Value == null) par1.Value = DBNull.Value;
-
-            DbParameter par2 = Database.AddParameter("@Searchtext2", Searchtext);
-            if (par2.Value == null) par2.Value = DBNull.Value;
-
-            DbParameter par3 = Database.AddParameter("@Searchtext3", Searchtext);
-            if (par3.Value == null) par3.Value = DBNull.Value;
-
-            DbParameter[] pars = new DbParameter[] { par1};
-            int affected = Database.ModifyData(sSQL, pars);
-
-            return affected;
+            return ListFoundContacts;
         }
 
     }

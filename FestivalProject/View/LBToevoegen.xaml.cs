@@ -25,15 +25,5 @@ namespace FestivalProject.View
             InitializeComponent();
         }
 
-        private void EnableDisableControls()
-        {
-            //button enkel enablen als de verplichte velden ingevuld zijn
-            btnOpslaan.IsEnabled = false;
-            if (txbName.Text != "" && txbBeschrijving.Text != "" && txbFB.Text != "")
-            {
-                btnOpslaan.IsEnabled = true;
-            }
-        }
-
     }
 }

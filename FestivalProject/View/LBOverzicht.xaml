@@ -5,16 +5,17 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:mui="http://firstfloorsoftware.com/ModernUI"
              xmlns:vm="clr-namespace:FestivalProject.ViewModel"
+             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+             xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Extras.WPF45"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     
-    <UserControl.DataContext>
+    <!--<UserControl.DataContext>
         <vm:LBandsVM/>
-    </UserControl.DataContext>
+    </UserControl.DataContext>-->
     
     <Grid Style="{StaticResource ContentRoot}">
 
-    
     <Grid>
             <Grid.Resources>
                 <Style TargetType="{x:Type TextBlock}">
@@ -25,38 +26,53 @@
 
             <ListBox Grid.Column="0" Grid.RowSpan="4" x:Name="Bands" ItemsSource="{Binding Bands}" DisplayMemberPath="Name" SelectedItem="{Binding SelectedBand}"/>
 
-            <TextBox Text="{Binding SelectedBand.Name}" Background="Transparent" BorderThickness="0"
+            <TextBox Text="{Binding SelectedBand.Name, UpdateSourceTrigger=PropertyChanged}" Background="Transparent" BorderThickness="0"
                    Grid.Row="0" Grid.Column="1"/>
-        
-            <TextBox Text="{Binding SelectedBand.Description}" AcceptsReturn="True" VerticalScrollBarVisibility="Visible" TextWrapping="Wrap"
+
+            <TextBox Text="{Binding SelectedBand.Description, UpdateSourceTrigger=PropertyChanged}" AcceptsReturn="True" VerticalScrollBarVisibility="Visible" TextWrapping="Wrap"
                    Grid.Row="1" Grid.Column="1"
                    />
 
-            <ListBox IsEnabled="False"
+            <ListBox IsEnabled="False" ItemsSource="{Binding SelectedBand.Genres}"
                     Grid.Row="2" Grid.Column="1">
-                <CheckBox IsChecked="True"/>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <WrapPanel>
+                            <CheckBox IsChecked="True" Content="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
+                        </WrapPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
             </ListBox>
 
-            <Image Margin="10" Source="{Binding SelectedBand.Picture}" VerticalAlignment="Center" HorizontalAlignment="Center" Stretch="Uniform"
+            <Image Margin="10" Source="{Binding SelectedBand.Picture, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" HorizontalAlignment="Center" Stretch="Uniform"
                 Grid.Row="0" Grid.RowSpan="3" Grid.Column="2"
                />
 
 
             <TextBlock Grid.Row="3" Grid.Column="2"  HorizontalAlignment="Right">
-                <Hyperlink NavigateUri="{Binding SelectedBand.Twitter}" RequestNavigate="Hyperlink_RequestNavigate">
+                <Hyperlink NavigateUri="{Binding SelectedBand.Twitter, UpdateSourceTrigger=PropertyChanged}" RequestNavigate="Hyperlink_RequestNavigate">
             <Image Source="../Assets/twitter.png" />
                     </Hyperlink>
             </TextBlock>
 
             <TextBlock Grid.Row="3" Grid.Column="2" HorizontalAlignment="Right" Margin="0 0 28 0">
-                <Hyperlink NavigateUri="{Binding SelectedBand.Facebook}" RequestNavigate="Hyperlink_RequestNavigate">
+                <Hyperlink NavigateUri="{Binding SelectedBand.Facebook, UpdateSourceTrigger=PropertyChanged}" RequestNavigate="Hyperlink_RequestNavigate">
             <Image Source="../Assets/facebook.png" />
                     </Hyperlink>
             </TextBlock>
 
+            <!--Button bedoeld om foto te bewerken-->
             <TextBlock Grid.Row="3" Grid.Column="2"  HorizontalAlignment="Left">
-            <Image Source="../Assets/edit.png" />
+            <Image Source="../Assets/edit.png">
+             <i:Interaction.Triggers>
+                <i:EventTrigger EventName="MouseDown">
+                    <cmd:EventToCommand Command="{Binding AddPictureCommand}"/>
+                </i:EventTrigger>
+             </i:Interaction.Triggers>
+            </Image>
             </TextBlock>
+
+            <Button Content="Bewerken" Grid.Row="3" Grid.Column="1" Command="{Binding EditBandCommand}"/>
                 
             <Grid.RowDefinitions>
             <RowDefinition Height="40"/>

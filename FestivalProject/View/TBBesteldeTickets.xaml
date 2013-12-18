@@ -8,11 +8,11 @@
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Extras.WPF45"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="300" >
 
-    <UserControl.DataContext>
+    <!--<UserControl.DataContext>
         <vm:TBestellenVM/>
-    </UserControl.DataContext>
+    </UserControl.DataContext>-->
 
     <UserControl.Resources>
         <Style TargetType="{x:Type Label}">
@@ -28,7 +28,7 @@
 
         <DataGrid x:Name="dtHolders" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserResizeRows="False" CanUserAddRows="False"
             Grid.Row="0" Grid.RowSpan="5" Grid.Column="0" Margin="5" AutoGenerateColumns="False"
-                  ItemsSource="{Binding Holders, UpdateSourceTrigger=PropertyChanged}" SelectionUnit="FullRow" SelectedItem="{Binding SelectedTicketHolder, UpdateSourceTrigger=PropertyChanged}"
+                  ItemsSource="{Binding Holders, Mode=TwoWay}" SelectionUnit="FullRow" SelectedItem="{Binding SelectedTicketHolder, UpdateSourceTrigger=PropertyChanged}"
                   >
 
             <i:Interaction.Triggers>
@@ -38,10 +38,10 @@
             </i:Interaction.Triggers>
 
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Naam" Binding="{Binding TicketHolder}"/>
-                <DataGridTextColumn Header="Email" Binding="{Binding TicketHolderEmail}"/>
-                <DataGridTextColumn Header="Type" IsReadOnly="True" Binding="{Binding TicketType.Name}"/>
-                <DataGridTextColumn Header="Aantal" Binding="{Binding Amount}"/>
+                <DataGridTextColumn Header="Naam" Binding="{Binding TicketHolder, Mode=TwoWay}"/>
+                <DataGridTextColumn Header="Email" Binding="{Binding TicketHolderEmail, Mode=TwoWay}"/>
+                <DataGridTextColumn Header="Type" IsReadOnly="True" Binding="{Binding TicketType.Name, Mode=TwoWay}"/>
+                <DataGridTextColumn Header="Aantal" Binding="{Binding Amount, Mode=TwoWay}"/>
             </DataGrid.Columns>
 
         </DataGrid>

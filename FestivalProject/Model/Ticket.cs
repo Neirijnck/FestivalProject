@@ -82,6 +82,23 @@ namespace FestivalProject
 
         }
 
+        public static Ticket GetLastTicketHolder() 
+        {
+            Ticket LastTicket = new Ticket();
+            ObservableCollection<TicketType> l = TicketType.GetTicketTypes();
+
+            DbDataReader reader = Database.GetData("SELECT * FROM Ticket WHERE Id = (SELECT max(Id) FROM Ticket)");
+            while (reader.Read())
+            {
+                int idTicketType = int.Parse(reader["TicketType"].ToString());
+                TicketType type = GetTicketTypeByID(l, idTicketType);
+
+                Ticket holder = Create(reader, type);
+                return holder;
+            }
+            return null;
+        }
+
         private static TicketType GetTicketTypeByID(ObservableCollection<TicketType> l, int idTicketType)
         {
             foreach (TicketType type in l) 
@@ -163,6 +180,8 @@ namespace FestivalProject
 
             return affected;
         }
+
+
 
 
         public string Error

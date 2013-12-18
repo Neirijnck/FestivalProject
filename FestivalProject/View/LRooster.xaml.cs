@@ -25,18 +25,5 @@ namespace FestivalProject.View
             InitializeComponent();
         }
 
-        private void EnableDisableControls()
-        {
-            //Buttons enkel als overal een item is geselecteerd in de comboboxen
-            btnOpslaan.IsEnabled = false;
-            btnVerwijderen.IsEnabled = false;
-
-            if (cboBand.SelectedIndex != -1 && cboDag.SelectedIndex != -1 && cboStage.SelectedIndex != -1)
-            {
-                btnOpslaan.IsEnabled = true;
-                btnVerwijderen.IsEnabled = true;
-            }
-        }
-
     }
 }

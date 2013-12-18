@@ -8,13 +8,12 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     
-    <UserControl.DataContext>
-        <vm:LBandsVM/>
-    </UserControl.DataContext>
-    
     <Grid Style="{StaticResource ContentRoot}">
         <!-- TODO: set @SelectedSource -->
         <mui:ModernTab Layout="Tab" SelectedSource="/View/LBOverzicht.xaml">
+            <mui:ModernTab.DataContext>
+                <vm:LBandsVM/>
+            </mui:ModernTab.DataContext>
             <mui:ModernTab.Links>
                 <!-- TODO: set @Source -->
                 <mui:Link DisplayName="Toevoegen" Source="/View/LBToevoegen.xaml"/>

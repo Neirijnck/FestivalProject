@@ -46,6 +46,19 @@ namespace FestivalProject
             return genres;
         }
 
+        public static Genre GetGenreIdByName(String GenreName) 
+        {
+            ObservableCollection<Genre> l = Genre.GetGenres();
+            foreach (Genre genre in l) 
+            {
+                if (genre.Name == GenreName)
+                {
+                    return genre;
+                }    
+            }
+            return null;
+        }
+
         private static Genre Create(IDataRecord record)
         {
             return new Genre() 
@@ -84,6 +97,17 @@ namespace FestivalProject
             return affected;
         }
 
+        public static Genre GetGenreById(ObservableCollection<Genre> l, int IdGenre)
+        {
+            foreach (Genre genre in l)
+            {
+                if (genre.Id == IdGenre.ToString())
+                {
+                    return genre;
+                }
+            }
+            return null;
+        }
 
         public string Error
         {

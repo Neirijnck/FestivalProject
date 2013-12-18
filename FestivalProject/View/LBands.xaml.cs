@@ -24,5 +24,6 @@ namespace FestivalProject.View
         {
             InitializeComponent();
         }
+
     }
 }

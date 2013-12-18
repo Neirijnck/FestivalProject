@@ -5,10 +5,26 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:mui="http://firstfloorsoftware.com/ModernUI"
              xmlns:vm="clr-namespace:FestivalProject.ViewModel"
+             xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Extras.WPF45"
+             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
              mc:Ignorable="d" 
-             d:DesignHeight="500" d:DesignWidth="300">
+             d:DesignHeight="650" d:DesignWidth="300">
+
+    <!--<UserControl.DataContext>
+        <vm:LBandsVM/>
+    </UserControl.DataContext>-->
 
     <UserControl.Resources>
+
+        <ControlTemplate x:Key="ErrorTemplate">
+            <StackPanel>
+                <Border BorderBrush="Black" BorderThickness="2">
+                    <AdornedElementPlaceholder/>
+                </Border>
+                <TextBlock Foreground="Black" Text="{Binding [0].ErrorContent}"/>
+            </StackPanel>
+        </ControlTemplate>
+
         <Style TargetType="{x:Type Label}">
             <Setter Property="VerticalAlignment" Value="Center" />
         </Style>
@@ -24,46 +40,76 @@
                />
 
         <TextBox Name="txbName"
-            Grid.Column="1" Grid.Row="0" Margin="5"
+            Grid.Column="1" Grid.Row="0" Margin="5,5,5,11" Height="30"
+                 Text="{Binding NewBand.Name, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
+                 Validation.ErrorTemplate="{StaticResource ErrorTemplate}"
             />
         
         <Label Content="Foto:"
                Grid.Column="0" Grid.Row="1"
                />
-        
+
         <Button Content="Bladeren..." Margin="5"
                 Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left" Width="90"
+                Command="{Binding AddPictureCommand}"
                 />
         
-        <TextBlock Margin="7" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Right"/>
+        <TextBlock Margin="7" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Right" Text="{Binding NaamAfbeelding}"/>
         
         <Label Content="Beschrijving:" 
                Grid.Column="0" Grid.Row="2"
                />
-        
-        <TextBox AcceptsReturn="True" TextWrapping="Wrap" VerticalAlignment="Stretch" Margin="5" VerticalScrollBarVisibility="Visible"
-                 Grid.Column="1" Grid.Row="2" Name="txbBeschrijving"
+
+        <TextBox AcceptsReturn="True" TextWrapping="Wrap" VerticalAlignment="Stretch" Margin="5,5,5,11" VerticalScrollBarVisibility="Visible"
+                 Grid.Column="1" Grid.Row="2" Name="txbBeschrijving" Height="30"
+                  Text="{Binding NewBand.Description, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
+                 Validation.ErrorTemplate="{StaticResource ErrorTemplate}"
                  />
         
         <Label Content="Facebooklink:" Grid.Column="0" Grid.Row="3"/>
-        <TextBox Margin="5" Grid.Row="3" Grid.Column="1" Name="txbFB"/>
+        <TextBox Margin="5,5,5,11" Grid.Row="3" Grid.Column="1" Name="txbFB" Height="30"
+                  Text="{Binding NewBand.Facebook, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
+                 Validation.ErrorTemplate="{StaticResource ErrorTemplate}"
+                 />
 
         <Label Content="Twitterlink:" Grid.Column="0" Grid.Row="4"/>
-        <TextBox Margin="5" Grid.Row="4" Grid.Column="1" Name="txbTwit"/>
+        <TextBox Margin="5,5,5,11" Grid.Row="4" Grid.Column="1" Name="txbTwit" Height="30"
+                  Text="{Binding NewBand.Twitter, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
+                 Validation.ErrorTemplate="{StaticResource ErrorTemplate}"
+                 />
 
         <Button Content="Opslaan" Margin="5" Name="btnOpslaan"
                 Command="{Binding AddCommand}"
-                Grid.Column="1" Grid.Row="6"
+                Grid.Column="1" Grid.Row="5" Height="40"
                 />
 
-        <Grid Grid.Column="2" Grid.Row="0" Grid.RowSpan="5">
+        <Grid Grid.Column="2" Grid.Row="0" Grid.RowSpan="6">
             
             <TextBlock Text="Genres:" 
                        Grid.Row="0" Grid.Column="0"
                        />
-            <WrapPanel Grid.Row="1" Grid.RowSpan="2" Margin="5">
-                <CheckBox Content=""/>
-            </WrapPanel>
+            
+            <ListView Name="genres" ItemsSource="{Binding Genres}" Grid.Row="1" Grid.RowSpan="2" Margin="5" Grid.Column="0" Grid.ColumnSpan="2">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <WrapPanel>
+                            <CheckBox Name="chkGenre" Content="{Binding Name}">
+
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="Checked">
+                                        <cmd:EventToCommand CommandParameter="{Binding ElementName=chkGenre}" Command="{Binding DataContext.AddGenreToListCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" />
+                                    </i:EventTrigger>
+
+                                    <i:EventTrigger EventName="Unchecked">
+                                        <cmd:EventToCommand CommandParameter="{Binding ElementName=chkGenre}" Command="{Binding DataContext.RemoveGenreFromListCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" />
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+
+                            </CheckBox>
+                        </WrapPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
             
             <Grid.RowDefinitions>
                 <RowDefinition Height="40" />
@@ -76,13 +122,12 @@
         </Grid>
         
         <Grid.RowDefinitions>
+            <RowDefinition Height="51"/>
             <RowDefinition Height="40"/>
-            <RowDefinition Height="40"/>
-                <RowDefinition Height="40"/>
-            <RowDefinition Height="40"/>
-            <RowDefinition Height="40"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="40"/>
+            <RowDefinition Height="51"/>
+            <RowDefinition Height="51"/>
+            <RowDefinition Height="51"/>
+            <RowDefinition Height="55"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="85"/>

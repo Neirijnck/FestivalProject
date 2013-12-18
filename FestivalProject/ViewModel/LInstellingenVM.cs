@@ -99,6 +99,24 @@ namespace FestivalProject.ViewModel
             set { _newGenre = value; OnPropertyChanged("NewGenre"); }
         }
 
+        //Property voor de geselecteerde stage
+        private Stage _selectedStage;
+
+        public Stage SelectedStage
+        {
+            get { return _selectedStage; }
+            set { _selectedStage = value; OnPropertyChanged("SelectedStage"); }
+        }
+
+        //Property voor geselecteerde genre
+        private Genre _selectedGenre;
+
+        public Genre SelectedGenre
+        {
+            get { return _selectedGenre; }
+            set { _selectedGenre = value; OnPropertyChanged("SelectedGenre"); }
+        }
+
         //Constructor
         public LInstellingenVM()
         {
@@ -106,6 +124,11 @@ namespace FestivalProject.ViewModel
             Stages = Stage.GetStages();
             Genres = Genre.GetGenres();
             FestivalData = new Festival();
+            //eind en begin datum zetten indien er al een in de database aanwezig is
+            SelectedStartDate = Festival.GetStartDate();
+            SelectedEndDate = Festival.GetEndDate();
+            FullDate = Convert.ToDateTime(SelectedStartDate).ToShortDateString() + "    -    " + Convert.ToDateTime(SelectedEndDate).ToShortDateString();
+
             NewStage = new Stage();
             NewGenre = new Genre();
         }
@@ -125,10 +148,13 @@ namespace FestivalProject.ViewModel
             if (e.RemovedItems.Count > 0)
             {
                 Genre genre = e.RemovedItems[0] as Genre;
-                int affected = Genre.EditGenre(genre);
-                if (affected == 1)
+                if (genre.Id != null)
                 {
-                    Console.WriteLine("Genre werd succesvol aangepast in de database");
+                    int affected = Genre.EditGenre(genre);
+                    if (affected == 1)
+                    {
+                        Console.WriteLine("Genre werd succesvol aangepast in de database");
+                    }
                 }
             }
         }
@@ -149,6 +175,8 @@ namespace FestivalProject.ViewModel
             if (affected == 1)
             {
                 Genres.Add(NewGenre);
+                int LastIndex = Genres.Count - 1;
+                SelectedGenre = Genres[LastIndex];
             }
         }
 
@@ -168,6 +196,8 @@ namespace FestivalProject.ViewModel
             if (affected == 1) 
             {
                 Stages.Add(NewStage);
+                int LastIndex = Stages.Count - 1;
+                SelectedStage = Stages[LastIndex];
             }
         }
 
@@ -186,10 +216,13 @@ namespace FestivalProject.ViewModel
             if (e.RemovedItems.Count > 0)
             {
                 Stage stage = e.RemovedItems[0] as Stage;
-                int affected = Stage.EditStage(stage);
-                if (affected == 1)
+                if (stage.Id != null)
                 {
-                    Console.WriteLine("Stage werd succesvol aangepast in de database");
+                    int affected = Stage.EditStage(stage);
+                    if (affected == 1)
+                    {
+                        Console.WriteLine("Stage werd succesvol aangepast in de database");
+                    }
                 }
             }
         }
@@ -206,11 +239,26 @@ namespace FestivalProject.ViewModel
         //Method om de data toe te voegen in de database
         private void AddDates() 
         {
-            int affected = Festival.AddFestival(FestivalData);
-            if (affected == 1)
+            DateTime? testStart = Festival.GetStartDate();
+
+            //Al een datum aanwezig, moet enkel aanpassen
+            if (testStart != null) 
             {
-                Festivals.Add(FestivalData);
-                ModernDialog.ShowMessage("De data is toegevoegd.", "Data", MessageBoxButton.OK);
+                int affected = Festival.EditFestival(FestivalData);
+                if (affected == 1) 
+                {
+                    ModernDialog.ShowMessage("De data is gewijzigd.", "Data", MessageBoxButton.OK);
+                }
+            }
+             //Nog niets van data aanwezig in database, toevoegen
+            else
+            {
+                int affected = Festival.AddFestival(FestivalData);
+                if (affected == 1)
+                {
+                    Festivals.Add(FestivalData);
+                    ModernDialog.ShowMessage("De data is toegevoegd.", "Data", MessageBoxButton.OK);
+                }
             }
         }
 
@@ -249,7 +297,7 @@ namespace FestivalProject.ViewModel
             DateTime EersteDatum = Convert.ToDateTime(SelectedStartDate);
             DateTime TweedeDatum = Convert.ToDateTime(SelectedEndDate);
 
-            TimeSpan Difference = TweedeDatum.Subtract(EersteDatum);
+            //TimeSpan Difference = TweedeDatum.Subtract(EersteDatum);
             int resultCompare = DateTime.Compare(EersteDatum, TweedeDatum);
 
             if (Date1 != "" && Date2 != "" && resultCompare <= 0)

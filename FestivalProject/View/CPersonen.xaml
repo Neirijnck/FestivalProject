@@ -54,6 +54,9 @@
             Height="30" Width="36" Style="{StaticResource modernzoek}">
             <Image Source="../Assets/zoeken.png" Visibility="Visible" Stretch="Fill"/>
         </Button>
+            <Button Height="30" Width="34" Style="{StaticResource modernzoek}" Command="{Binding RefreshCommand}">
+                <Image Source="../Assets/refresh.png" Visibility="Visible" Stretch="Fill"/>
+            </Button>
         </StackPanel>
             
         <DataGrid Name="DtGridPersonen" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserResizeRows="False" CanUserAddRows="False"

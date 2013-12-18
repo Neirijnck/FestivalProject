@@ -101,10 +101,13 @@ namespace FestivalProject.ViewModel
             if (e.RemovedItems.Count > 0) 
             {
                 Contactperson cp = e.RemovedItems[0] as Contactperson;
-                int affected = Contactperson.EditContact(cp);
-                if (affected == 1)
+                if (cp.Id != null)
                 {
-                    Console.WriteLine("Contact werd succesvol aangepast in de database");
+                    int affected = Contactperson.EditContact(cp);
+                    if (affected == 1)
+                    {
+                        Console.WriteLine("Contact werd succesvol aangepast in de database");
+                    }
                 }
             }
         }
@@ -149,10 +152,22 @@ namespace FestivalProject.ViewModel
         {
             String Search = txt.Text;
             //zoeken in datagrid
-            int affected = Contactperson.SearchContacts(Search);
-            Console.WriteLine(affected);
+            Persons = Contactperson.GetContactsByString(Persons, Search);
         }
 
+        //Command om datagrid te refreshen
+        public ICommand RefreshCommand 
+        {
+            get 
+            {
+                return new RelayCommand(RefreshDataGrid);
+            }
+        }
 
+        //Methode om datagrid te refreshen
+        private void RefreshDataGrid() 
+        {
+            Persons = Contactperson.GetContactpersons();
+        }
     }
 }
