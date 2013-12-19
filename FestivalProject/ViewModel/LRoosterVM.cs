@@ -80,17 +80,7 @@ namespace FestivalProject.ViewModel
         {
             get { return _selectedLineUp; }
             set { _selectedLineUp = value; OnPropertyChanged("SelectedLineUp"); }
-        }     
-   
-        //Geselecteerde band in line up property
-        private Band _selectedBand;
-
-        public Band SelectedBand
-        {
-            get { return _selectedBand; }
-            set { _selectedBand = value; OnPropertyChanged("SelectedBand"); }
-        }
-        
+        }             
         
         //Property voor line up
         private ObservableCollection<LineUp> _lineUps;
@@ -159,24 +149,6 @@ namespace FestivalProject.ViewModel
             return null;
         }
 
-        //Command om geselecteerde band te zetten
-        public ICommand BindGeselecteerdeBand 
-        {
-            get 
-            {
-                return new RelayCommand(SelectedBandBinden);
-            }
-        }
-
-        //Method om de band uit de lineup te binden aan de property selectedBand
-        private void SelectedBandBinden() 
-        {
-            if (SelectedLineUp != null)
-            {
-                SelectedBand = SelectedLineUp.Band;
-            }
-        }
-
         //Command om line up te tonen
         public ICommand ToonLineUpCommand 
         {
@@ -216,9 +188,26 @@ namespace FestivalProject.ViewModel
         //method om line up te bewerken
         private void EditLineUp()
         {
-            if (SelectedLineUp.Id != null)
+            try
             {
-
+                if (SelectedLineUp.Id != null)
+                {
+                    SelectedLineUp.Stage = SelectedStage;
+                    int affected = LineUp.EditLineUp(SelectedLineUp);
+                    if (affected == 1)
+                    {
+                        ModernDialog.ShowMessage("Het optreden werd gewijzigd.", "Wijzigen", MessageBoxButton.OK);
+                    }
+                }
+                else
+                {
+                    //doe niets en keer terug
+                }
+            }
+            catch (NullReferenceException ex) 
+            {
+                ModernDialog.ShowMessage("Gelieve een optreden te selecteren", "Wijzigen", MessageBoxButton.OK);
+                Console.WriteLine(ex.Message); 
             }
         }
 
@@ -237,10 +226,11 @@ namespace FestivalProject.ViewModel
                 int affected = LineUp.AddLineUp(NewLineUp);
                 if (affected == 1)
                 {
-                    LineUps.Add(NewLineUp);
+                    //LineUps.Add(NewLineUp);
+                    LineUps = LineUp.GetLineUpByStageAndDay(SelectedStage, SelectedDay);
+                    int lastIndex = LineUps.Count - 1;
+                    SelectedLineUp = LineUps[lastIndex];
                     NewLineUp = new LineUp();
-                    int LastIndex = Bands.Count - 1;
-                    SelectedBand = Bands[LastIndex];
                     Console.WriteLine("Line up werd succesvol toegevoegd in de database.");
                     ModernDialog.ShowMessage("Het optreden werd toegevoegd.", "Toevoegen", MessageBoxButton.OK);
                 }

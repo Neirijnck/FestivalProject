@@ -27,12 +27,12 @@
 
         <DataTemplate x:Key="EditableListBoxTemplateStage">
             <StackPanel>
-                <TextBox Text="{Binding Name}" Background="#F6F6F6" BorderThickness="0"/>
+                <TextBox Text="{Binding Name}" Background="Transparent" BorderThickness="0"/>
             </StackPanel>
         </DataTemplate>
         <DataTemplate x:Key="EditableListBoxTemplateGenre">
             <StackPanel>
-                <TextBox Text="{Binding Name}" Background="#F6F6F6" BorderThickness="0"/>
+                <TextBox Text="{Binding Name}" Background="Transparent" BorderThickness="0"/>
             </StackPanel>
         </DataTemplate>
         

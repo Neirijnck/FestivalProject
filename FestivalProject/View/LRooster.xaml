@@ -78,12 +78,6 @@
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
-            <i:Interaction.Triggers>
-                <i:EventTrigger EventName="SelectionChanged">
-                    <cmd:EventToCommand Command="{Binding BindGeselecteerdeBand}"/>
-                </i:EventTrigger>
-            </i:Interaction.Triggers>
-
         </ListBox>
         
         <Grid Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3">
@@ -109,6 +103,7 @@
         <ComboBox Name="cboBand"
             Grid.Row="1" Grid.Column="2" Margin="8"
                   ItemsSource="{Binding Bands, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" DisplayMemberPath="Name"
+                  SelectedItem="{Binding SelectedLineUp.Band}" SelectedValuePath="Name" SelectedValue="{Binding SelectedLineUp.Band.Name}"
             />
         <Button Content="Wijzigen" Name="btnOpslaan"
                 Grid.Row="2" Grid.Column="2" Margin="8" Command="{Binding EditLineUpCommand}"

@@ -116,7 +116,7 @@ namespace FestivalProject
             ObservableCollection<LineUp> LineUp = new ObservableCollection<LineUp>();
             ObservableCollection<Band> lB = Band.GetBands();
 
-            String sql = "SELECT * FROM LineUp WHERE Stage=@StageId AND Date=@Date";
+            String sql = "SELECT * FROM LineUp WHERE Stage=@StageId AND Date=@Date ORDER BY [FROM] asc";
 
             DbParameter par1 = Database.AddParameter("@StageId", stage.Id);
             if (par1.Value == null) par1.Value = DBNull.Value;
@@ -179,7 +179,7 @@ namespace FestivalProject
 
         public static int EditLineUp(LineUp lineUp)
         {
-            String sSQL = "Update LineUp SET Date=@Date, From=@From, Until=@Until, Stage=@Stage, Band=@Band WHERE ID=@ID";
+            String sSQL = "Update LineUp SET Date=@Date, [From]=@From, Until=@Until, Stage=@Stage, Band=@Band WHERE ID=@ID";
 
             DbParameter par1 = Database.AddParameter("@Date", lineUp.Date);
             if (par1.Value == null) par1.Value = DBNull.Value;
