@@ -72,7 +72,7 @@
 
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Naam" Binding="{Binding Name}"/>
-                <DataGridTextColumn Header="Type" IsReadOnly="True" Binding="{Binding JobRole.Name}"/>
+                <DataGridTextColumn Header="Type" Binding="{Binding JobRole.Name}"/>
                 <DataGridTextColumn Header="Telefoonnummer" Binding="{Binding Phone}"/>
                 <DataGridTextColumn Header="Email" Binding="{Binding Email}"/>
             </DataGrid.Columns>

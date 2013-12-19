@@ -99,6 +99,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Converters\StringFormatToImageSourceConverter.cs" />
     <Compile Include="Model\Band.cs" />
     <Compile Include="Model\Database.cs" />
     <Compile Include="Model\Genre.cs" />
@@ -267,38 +268,7 @@
     <Resource Include="Assets\edit.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Assets\eminem.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Assets\imagined.jpg" />
-    <Resource Include="Assets\wilkinson.jpg" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Assets\refresh.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Assets\alt.jpg" />
-    <Resource Include="Assets\avicii.jpg" />
-    <Resource Include="Assets\timberlake.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Assets\imagine.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Assets\blackkeys.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Assets\twodoor.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Assets\chase.jpg" />
-    <Resource Include="Assets\rudimental.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Assets\arctic.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Assets\simple.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

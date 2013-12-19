@@ -7,6 +7,7 @@
              xmlns:vm="clr-namespace:FestivalProject.ViewModel"
              xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
              xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Extras.WPF45"
+             xmlns:c="clr-namespace:FestivalProject.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     
@@ -18,6 +19,9 @@
 
     <Grid>
             <Grid.Resources>
+
+                <c:StringFormatToImageSourceConverter x:Key="StringToImage"/>
+
                 <Style TargetType="{x:Type TextBlock}">
                     <Setter Property="VerticalAlignment" Value="Center" />
                     <Setter Property="Margin" Value="5" />
@@ -44,10 +48,9 @@
                 </ListBox.ItemTemplate>
             </ListBox>
 
-            <Image Margin="10" Source="{Binding SelectedBand.Picture, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" HorizontalAlignment="Center" Stretch="Uniform"
+            <Image Margin="10" Source="{Binding Path=SelectedBand.Picture, Converter={StaticResource StringToImage}, ConverterParameter=/Assets/{0}}" VerticalAlignment="Center" HorizontalAlignment="Center" Stretch="Uniform"
                 Grid.Row="0" Grid.RowSpan="3" Grid.Column="2"
                />
-
 
             <TextBlock Grid.Row="3" Grid.Column="2"  HorizontalAlignment="Right">
                 <Hyperlink NavigateUri="{Binding SelectedBand.Twitter, UpdateSourceTrigger=PropertyChanged}" RequestNavigate="Hyperlink_RequestNavigate">

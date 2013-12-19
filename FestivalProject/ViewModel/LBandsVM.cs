@@ -65,16 +65,15 @@ namespace FestivalProject.ViewModel
             get { return _naamAfbeelding; }
             set { _naamAfbeelding = value; OnPropertyChanged("NaamAfbeelding"); }
         }
-        
 
-        //Property om nieuwe afbeelding toe te voegen
-        private String _picturePath;
+        ////Property om nieuwe afbeelding toe te voegen
+        //private String _picturePath;
 
-        public String PicturePath
-        {
-            get { return _picturePath; }
-            set { _picturePath = value; OnPropertyChanged("PicturePath"); }
-        }
+        //public String PicturePath
+        //{
+        //    get { return _picturePath; }
+        //    set { _picturePath = value; OnPropertyChanged("PicturePath"); }
+        //}
 
         //Property selected Genres
         private ObservableCollection<Genre> _selectedGenres;
@@ -144,24 +143,7 @@ namespace FestivalProject.ViewModel
 
         private void AddBand() 
         {
-            //bij de save command van band:
-            //vraag pad op van image
-
-            
-            //Stream stream = ImageSource.StreamSource;
-            //Byte[] buffer = null;
-            //if (stream != null && stream.Length > 0)
-            //{
-            //    using (BinaryReader br = new BinaryReader(stream))
-            //    {
-            //        buffer = br.ReadBytes((Int32)stream.Length);
-            //    }
-            //}
-
-            //NewBand.PictureByte = buffer;
-
-            PicturePath = PicturePath.Replace(@"\", @"/");
-            NewBand.Picture = PicturePath;
+            NewBand.Picture = NaamAfbeelding;
             NewBand.Genres = SelectedGenres;
             int affected = Band.AddBand(NewBand);
             if (affected == 1)
@@ -189,10 +171,9 @@ namespace FestivalProject.ViewModel
         {
             if (SelectedBand.Id != null)
             {
-                if (PicturePath != null)
+                if (NaamAfbeelding != null)
                 {
-                    PicturePath = PicturePath.Replace(@"\", @"/");
-                    SelectedBand.Picture = PicturePath;
+                    SelectedBand.Picture = NaamAfbeelding;
                 }
                 int affected = Band.EditBand(SelectedBand);
                 if (affected == 1)
@@ -224,12 +205,11 @@ namespace FestivalProject.ViewModel
             if (ofd.ShowDialog() == true)
             {
                 NaamAfbeelding = System.IO.Path.GetFileName(ofd.FileName);
-                PicturePath = "..\\Assets\\" + NaamAfbeelding;
                 try
                 {
                     if (File.Exists(ofd.FileName) == true)
                     {
-                        File.Copy(ofd.FileName, AppDomain.CurrentDomain.BaseDirectory + "..\\" + PicturePath);
+                        File.Copy(ofd.FileName, AppDomain.CurrentDomain.BaseDirectory + "//Assets//" +NaamAfbeelding);
                     }
                 }
                 catch (IOException ex)
