@@ -217,7 +217,8 @@ namespace FestivalProject.ViewModel
                 NewLineUp.Date = Convert.ToDateTime(SelectedDay);
                 NewLineUp.Stage = SelectedStage;
 
-                //controles van data en uren (niet op zelfde moment optreden)
+                //Controle uren en data (niet op zelfde moment)
+
                 NewLineUp.From = HourFrom.ToShortTimeString();
                 NewLineUp.Until = HourUntil.ToShortTimeString();
                 int affected = LineUp.AddLineUp(NewLineUp);

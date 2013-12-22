@@ -138,17 +138,28 @@ namespace FestivalProject.ViewModel
         //Method om band toe te voegen in database
         private void AddBand() 
         {
-            NewBand.Picture = NaamAfbeelding;
-            NewBand.Genres = SelectedGenres;
-            int affected = Band.AddBand(NewBand);
-            if (affected == 1)
+            if (NaamAfbeelding != null)
             {
-                Bands.Add(NewBand);
-                OnPropertyChanged("Bands");
-                int LastIndex = Bands.Count - 1;
-                SelectedBand = Bands[LastIndex];
-                Console.WriteLine("Band werd succesvol toegevoegd in de database.");
-                ModernDialog.ShowMessage("De band/artiest werd toegevoegd.", "Toevoegen", MessageBoxButton.OK);
+                if (SelectedGenres.Count != 0)
+                {
+                    NewBand.Picture = NaamAfbeelding;
+                    NewBand.Genres = SelectedGenres;
+                    int affected = Band.AddBand(NewBand);
+                    if (affected == 1)
+                    {
+                        Bands.Add(NewBand);
+                        OnPropertyChanged("Bands");
+                        int LastIndex = Bands.Count - 1;
+                        SelectedBand = Bands[LastIndex];
+                        Console.WriteLine("Band werd succesvol toegevoegd in de database.");
+                        ModernDialog.ShowMessage("De band/artiest werd toegevoegd.", "Toevoegen", MessageBoxButton.OK);
+                    }
+                }
+                else { ModernDialog.ShowMessage("Kies minstens 1 genre.", "Genres", MessageBoxButton.OK); }
+            }
+            else 
+            {
+                ModernDialog.ShowMessage("Kies eerst een afbeelding.", "Afbeelding", MessageBoxButton.OK);
             }
         }
 

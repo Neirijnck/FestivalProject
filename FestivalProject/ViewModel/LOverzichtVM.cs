@@ -52,7 +52,7 @@ namespace FestivalProject.ViewModel
             set { _dagen = value; OnPropertyChanged("Dagen"); }
         }
 
-        //Property
+        //Property voor alle dagoverzichten
         private ObservableCollection<ObservableCollection<LineUp>> _dagOverzichten;
 
         public ObservableCollection<ObservableCollection<LineUp>> DagOverzichten

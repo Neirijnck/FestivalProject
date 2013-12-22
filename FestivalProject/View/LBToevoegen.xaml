@@ -49,7 +49,7 @@
                Grid.Column="0" Grid.Row="1"
                />
 
-        <Button Content="Bladeren..." Margin="5"
+        <Button Content="Bladeren..." Margin="5" Name="btnPicture"
                 Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left" Width="90"
                 Command="{Binding AddPictureCommand}"
                 />

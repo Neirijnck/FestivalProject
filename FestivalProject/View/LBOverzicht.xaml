@@ -75,7 +75,7 @@
             </Image>
             </TextBlock>
 
-            <Button Content="Bewerken" Grid.Row="3" Grid.Column="1" Command="{Binding EditBandCommand}"/>
+            <Button Name="btnEdit" Content="Bewerken" Grid.Row="3" Grid.Column="1" Command="{Binding EditBandCommand}" />
                 
             <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
