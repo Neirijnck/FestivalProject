@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace FestivalProject
 {
+    //Properties
     public class Genre : IDataErrorInfo
     {
         private String _id;
@@ -32,6 +33,7 @@ namespace FestivalProject
             set { _name = value; }
         }
 
+        //Alle genres ophalen
         public static ObservableCollection<Genre> GetGenres() 
         {
             ObservableCollection<Genre> genres = new ObservableCollection<Genre>();
@@ -46,6 +48,7 @@ namespace FestivalProject
             return genres;
         }
 
+        //Een genre id ophalen met zijn naam
         public static Genre GetGenreIdByName(String GenreName) 
         {
             ObservableCollection<Genre> l = Genre.GetGenres();
@@ -59,6 +62,7 @@ namespace FestivalProject
             return null;
         }
 
+        //Een nieuw genre creeren
         private static Genre Create(IDataRecord record)
         {
             return new Genre() 
@@ -68,6 +72,7 @@ namespace FestivalProject
             };
         }
 
+        //Een nieuw genre toevoegen in database
         public static int AddGenre(Genre genre)
         {
             String sSQL = "INSERT INTO Genre(Name) VALUES(@Name)";
@@ -81,6 +86,7 @@ namespace FestivalProject
             return affected;
         }
 
+        //Een bestaand genre bewerken
         public static int EditGenre(Genre genre)
         {
             String sSQL = "Update Genre Set Name=@Name WHERE ID=@ID";
@@ -97,6 +103,7 @@ namespace FestivalProject
             return affected;
         }
 
+        //Een genre teruggeven adhv zijn id
         public static Genre GetGenreById(ObservableCollection<Genre> l, int IdGenre)
         {
             foreach (Genre genre in l)
@@ -109,6 +116,7 @@ namespace FestivalProject
             return null;
         }
 
+        //DATAVALIDATIE
         public string Error
         {
             get { return null; }

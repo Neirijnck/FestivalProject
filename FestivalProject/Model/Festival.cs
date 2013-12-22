@@ -14,6 +14,7 @@ namespace FestivalProject
 {
     public class Festival : IDataErrorInfo
     {
+        //Properties
         private DateTime _startDate;
 
         [DataType(DataType.DateTime)]
@@ -60,6 +61,7 @@ namespace FestivalProject
             return null;
         }
 
+        //Alle bestaande festivals ophalen
         public static ObservableCollection<Festival> GetFestivals() 
         {
             ObservableCollection<Festival> festivals = new ObservableCollection<Festival>();
@@ -74,6 +76,7 @@ namespace FestivalProject
             return festivals;
         }
 
+        //Een nieuw festival aanmaken
         private static Festival Create(IDataRecord record)
         {
             return new Festival() 
@@ -83,6 +86,7 @@ namespace FestivalProject
             };
         }
 
+        //Een bestaand festival aanpassen
         public static int EditFestival(Festival festivaldata) 
         {
             String sSQL = "Update Festival Set StartDate=@StartDate, EndDate=@EndDate ";
@@ -99,6 +103,7 @@ namespace FestivalProject
             return affected;
         }
 
+        //Een nieuw festival toevoegen
         public static int AddFestival(Festival festivaldata) 
         {
             String sSQL = "INSERT INTO Festival(StartDate, EndDate) VALUES(@StartDate, @EndDate)";
@@ -115,7 +120,7 @@ namespace FestivalProject
             return affected;
         }
 
-
+        //DATAVALIDATIE
         public string Error
         {
             get { return null; }

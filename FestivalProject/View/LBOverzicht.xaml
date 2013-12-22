@@ -48,7 +48,7 @@
                 </ListBox.ItemTemplate>
             </ListBox>
 
-            <Image Margin="10" Source="{Binding Path=SelectedBand.Picture, Converter={StaticResource StringToImage}, ConverterParameter=/Assets/{0}}" VerticalAlignment="Center" HorizontalAlignment="Center" Stretch="Uniform"
+            <Image Margin="10" Source="{Binding Path=SelectedBand.Picture, Converter={StaticResource StringToImage}, ConverterParameter=Assets/{0}}" VerticalAlignment="Center" HorizontalAlignment="Center" Stretch="Uniform"
                 Grid.Row="0" Grid.RowSpan="3" Grid.Column="2"
                />
 

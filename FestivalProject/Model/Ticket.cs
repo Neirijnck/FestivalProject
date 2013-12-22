@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 
 namespace FestivalProject
 {
+    //Properties
     public class Ticket: IDataErrorInfo
     {
         private String _id;
@@ -62,6 +63,7 @@ namespace FestivalProject
             set { _amount = value; }
         }
 
+        //Alle ticket(houders) ophalen
         public static ObservableCollection<Ticket> GetTicketHolders() 
         {
             ObservableCollection<Ticket> holders = new ObservableCollection<Ticket>();
@@ -82,6 +84,7 @@ namespace FestivalProject
 
         }
 
+        //De laatste nieuwe toegevoegde ophalen
         public static Ticket GetLastTicketHolder() 
         {
             Ticket LastTicket = new Ticket();
@@ -99,6 +102,7 @@ namespace FestivalProject
             return null;
         }
 
+        //Een tickettype tonen adhv zijn id
         private static TicketType GetTicketTypeByID(ObservableCollection<TicketType> l, int idTicketType)
         {
             foreach (TicketType type in l) 
@@ -111,6 +115,7 @@ namespace FestivalProject
             return null;
         }
 
+        //Een nieuw ticket creeren
         private static Ticket Create(IDataRecord record, TicketType type)
         {
             return new Ticket() {
@@ -122,6 +127,7 @@ namespace FestivalProject
             };
         }
 
+        //Aantal verkochte tickets berekenen en teruggeven
         public static int GetAmountSoldTickets() 
         {
             int aantalVerkochte = 0;
@@ -136,6 +142,7 @@ namespace FestivalProject
              return aantalVerkochte;
         }
 
+        //Een bestaand ticket bewerken
         public static int EditTicketHolder(Ticket holder)
         {
 
@@ -159,6 +166,7 @@ namespace FestivalProject
             return affected;
         }
 
+        //Een nieuw ticket toevoegen in database
         public static int AddTicketHolder(Ticket holder)
         {
             String sSQL = "INSERT INTO Ticket(TicketHolder, TicketHolderEmail, TicketType, Amount) VALUES(@TicketHolder, @TicketHolderEmail, @TicketType, @Amount)";
@@ -181,9 +189,7 @@ namespace FestivalProject
             return affected;
         }
 
-
-
-
+        //DATAVALIDATIE
         public string Error
         {
             get { return null; }

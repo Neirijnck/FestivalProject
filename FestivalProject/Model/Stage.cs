@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace FestivalProject
 {
+    //Properties
     public class Stage : IDataErrorInfo
     {
         private String _id;
@@ -32,6 +33,7 @@ namespace FestivalProject
             set { _name = value; }
         }
 
+        //Alle stages ophalen
         public static ObservableCollection<Stage> GetStages() 
         {
             ObservableCollection<Stage> stages = new ObservableCollection<Stage>();
@@ -47,6 +49,7 @@ namespace FestivalProject
             return stages;
         }
 
+        //Een nieuwe stage maken
         private static Stage Create(IDataRecord record)
         {
             return new Stage() 
@@ -56,6 +59,7 @@ namespace FestivalProject
             };
         }
 
+        //Een stage ophalen met zijn id
         public static Stage GetStageById(ObservableCollection<Stage> l, int IdStage) 
         {
             foreach (Stage stage in l) 
@@ -68,6 +72,7 @@ namespace FestivalProject
             return null;
         }
 
+        //Een nieuwe stage toevoegen in database
         public static int AddStage(Stage stage) 
         {
             String sSQL = "INSERT INTO Stage(Name) VALUES(@Name)";
@@ -81,6 +86,7 @@ namespace FestivalProject
             return affected;
         }
 
+        //Een bestaande stage bewerken
         public static int EditStage(Stage stage)
         {
             String sSQL = "Update Stage Set Name=@Name WHERE ID=@ID";
@@ -97,7 +103,7 @@ namespace FestivalProject
             return affected;
         }
 
-
+        //DATAVALIDATIE
         public string Error
         {
             get { return null; }

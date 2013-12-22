@@ -106,9 +106,7 @@ namespace FestivalProject.ViewModel
                 SelectedTicketHolder = Holders[LastIndex];
 
                 ModernDialog.ShowMessage("Uw tickets zijn besteld.", "Bestelling", MessageBoxButton.OK);
-
             }
-           
         }
 
         //Command om een tickethouder te bewerken
@@ -154,6 +152,7 @@ namespace FestivalProject.ViewModel
             {
                 //export naar word
 
+                //Eerst een savefile dialog openen zodat gebruiker kan kiezen waar en hoe het document zal worden opgeslaan
                 SaveFileDialog sfd = new SaveFileDialog();
                 sfd.Filter = "Word Doc|*.docx";
                 sfd.FileName = "FestivalTicket_" + TicketHolder.TicketHolder + ".docx";
@@ -162,6 +161,7 @@ namespace FestivalProject.ViewModel
 
                     if (File.Exists("template.docx") == true)
                     {
+                        //Kopieer de template met een eigen naam
                         File.Copy("template.docx", sfd.FileName, true);
                     }
 
@@ -174,6 +174,7 @@ namespace FestivalProject.ViewModel
                         bookmarks[bms.Name] = bms;
                     }
 
+                    //Properties voor font en zo instellen voor iedere append die nodig is
                     Run run1 = new Run(new Text(TicketHolder.TicketHolder));
                     RunProperties prop1 = new RunProperties();
                     RunFonts font1 = new RunFonts() { Ascii = "Source Sans Pro", HighAnsi = "Source Sans Pro" };
@@ -224,7 +225,6 @@ namespace FestivalProject.ViewModel
                     prop.Append(size);
                     run.PrependChild<RunProperties>(prop);
                     bookmarks["Barcode"].Parent.InsertAfter<Run>(run, bookmarks["Barcode"]);
-
 
                     newdoc.Close();
                     ModernDialog.ShowMessage("Uw ticket werd opgeslagen om te printen.", "Printen", MessageBoxButton.OK);

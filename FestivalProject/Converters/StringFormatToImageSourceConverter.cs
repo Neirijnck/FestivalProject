@@ -13,7 +13,8 @@ namespace FestivalProject.Converters
         {
             if (parameter is string)
             {
-                string geformatteerd = string.Format(parameter.ToString(), value);
+                string geformatteerd = AppDomain.CurrentDomain.BaseDirectory;
+                geformatteerd += string.Format(parameter.ToString(), value);
                 return geformatteerd;
             }
             return null;

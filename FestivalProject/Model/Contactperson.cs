@@ -15,6 +15,7 @@ namespace FestivalProject
 {
     public class Contactperson : IDataErrorInfo
     {
+        //Properties
         private String _id;
 
         public String Id
@@ -62,6 +63,7 @@ namespace FestivalProject
             set { _phone = value; }
         }
 
+        //Alle contactpersonen ophalen uit database
         public static ObservableCollection<Contactperson> GetContactpersons() 
         {
             ObservableCollection<Contactperson> persons = new ObservableCollection<Contactperson>();
@@ -81,6 +83,7 @@ namespace FestivalProject
             return persons;
         }
 
+        //Een nieuw contactpersoon maken
         private static Contactperson Create(IDataRecord record, ContactpersonType type)
         {
             return new Contactperson() 
@@ -91,9 +94,9 @@ namespace FestivalProject
                 Email = record["Email"].ToString(),
                 Phone = record["Phone"].ToString()
             };
-
         }
 
+        //Een bestaand contact bewerken
         public static int EditContact(Contactperson c)
         {
 
@@ -120,6 +123,7 @@ namespace FestivalProject
             return affected;
         }
 
+        //Een contactpersoon verwijderen
         public static int DeleteContactperson(Contactperson cp) 
         {
             String sSQL = "DELETE FROM Contactperson WHERE Id=@Id";
@@ -133,6 +137,7 @@ namespace FestivalProject
             return affected;
         }
 
+        //Een nieuw contactpersoon toevoegen in database
         public static int AddContactperson(Contactperson cp) 
         {
             String sSQL = "INSERT INTO Contactperson(Name, Jobrole, Email, Phone) VALUES(@Name, @JobRole, @Email, @Phone)";
@@ -155,6 +160,7 @@ namespace FestivalProject
             return affected;
         }
 
+        //DATAVALIDATIE
         public string Error
         {
             get { return null; }
@@ -184,6 +190,7 @@ namespace FestivalProject
             return Validator.TryValidateObject(this, new ValidationContext(this, null, null), null, true);
         }
 
+        //Zoeken in contactpersonenlijst op basis van een string
         public static ObservableCollection<Contactperson> GetContactsByString(ObservableCollection<Contactperson> contacts, String search)
         {
             ObservableCollection<Contactperson> ListFoundContacts = new ObservableCollection<Contactperson>();

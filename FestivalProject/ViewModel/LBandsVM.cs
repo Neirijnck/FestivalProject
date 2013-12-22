@@ -40,6 +40,7 @@ namespace FestivalProject.ViewModel
             set { _bands = value; OnPropertyChanged("Bands"); }
         }
 
+        //Property voor een nieuwe band
         private Band _newBand;
 
         public Band NewBand
@@ -65,15 +66,6 @@ namespace FestivalProject.ViewModel
             get { return _naamAfbeelding; }
             set { _naamAfbeelding = value; OnPropertyChanged("NaamAfbeelding"); }
         }
-
-        ////Property om nieuwe afbeelding toe te voegen
-        //private String _picturePath;
-
-        //public String PicturePath
-        //{
-        //    get { return _picturePath; }
-        //    set { _picturePath = value; OnPropertyChanged("PicturePath"); }
-        //}
 
         //Property selected Genres
         private ObservableCollection<Genre> _selectedGenres;
@@ -133,6 +125,8 @@ namespace FestivalProject.ViewModel
                 SelectedGenres.Remove(genre);
             }
         }
+
+        //Command om een nieuwe band toe te voegen
         public ICommand AddCommand 
         {
             get 
@@ -141,6 +135,7 @@ namespace FestivalProject.ViewModel
             }
         }
 
+        //Method om band toe te voegen in database
         private void AddBand() 
         {
             NewBand.Picture = NaamAfbeelding;
@@ -178,6 +173,9 @@ namespace FestivalProject.ViewModel
                 int affected = Band.EditBand(SelectedBand);
                 if (affected == 1)
                 {
+                    Bands = Band.GetBands();
+                    int LastIndex = Bands.Count - 1;
+                    SelectedBand = Bands[LastIndex];
                     Console.WriteLine("Band werd succesvol aangepast in de database.");
                     ModernDialog.ShowMessage("De band/artiest werd aangepast in de database.", "Aanpassen", MessageBoxButton.OK);
                 }

@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 
 namespace FestivalProject
 {
+    //Properties
     public class ContactpersonType : IDataErrorInfo
     {
         private String _id;
@@ -36,6 +37,7 @@ namespace FestivalProject
             }
         }
 
+        //Alle contactpersoontypes ophalen
         public static ObservableCollection<ContactpersonType> GetContactpersonTypes() 
         {
             ObservableCollection<ContactpersonType> cpersontypes = new ObservableCollection<ContactpersonType>();
@@ -50,6 +52,7 @@ namespace FestivalProject
             return cpersontypes;
         }
 
+        //Een nieuw contactpersoontype creeren
         private static ContactpersonType Create(IDataRecord record)
         {
             return new ContactpersonType() 
@@ -59,6 +62,7 @@ namespace FestivalProject
             };
         }
 
+        //Een bestaand contactpersoontype bewerken
         public static int EditContactPersonType(ContactpersonType Type)
         {
             String sSQL = "Update ContactpersonType Set Name=@Name WHERE ID=@Id";
@@ -75,6 +79,7 @@ namespace FestivalProject
             return affected;
         }
 
+        //Een contactpersoontype toevoegen
         public static int AddContactPersonType(ContactpersonType type) 
         {
             String sSQL = "INSERT INTO ContactpersonType(Name) VALUES(@Name)";
@@ -88,6 +93,7 @@ namespace FestivalProject
             return affected;
         }
 
+        //Contactpersoontype teruggeven adhv zijn id
         public static ContactpersonType GetContactPersonTypeByID(ObservableCollection<ContactpersonType> l, int idJob)
         {
             foreach (ContactpersonType type in l)
@@ -100,6 +106,7 @@ namespace FestivalProject
             return null;
         }
 
+        //DATAVALIDATIE
         public string Error
         {
             get { return null; }

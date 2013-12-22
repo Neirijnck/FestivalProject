@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 
 namespace FestivalProject
 {
+    //Properties
     public class TicketType : IDataErrorInfo
     {
         private String _id;
@@ -52,6 +53,7 @@ namespace FestivalProject
             set { _availableTickets = value; }
         }
 
+        //Alle verschillende tickettypes ophalen
         public static ObservableCollection<TicketType> GetTicketTypes() 
         {
             ObservableCollection<TicketType> ticketTypes = new ObservableCollection<TicketType>();
@@ -66,6 +68,7 @@ namespace FestivalProject
             return ticketTypes;
         }
 
+        //Een nieuw tickettype creeren
         private static TicketType Create(IDataRecord record)
         {
             return new TicketType() 
@@ -77,6 +80,7 @@ namespace FestivalProject
             };
         }
 
+        //Een nieuw tickettype toevoegen
         public static int AddTicketType(TicketType Type) 
         {
             String sSQL = "INSERT INTO TicketType(Name, Price, AvailableTickets) VALUES(@Name,@Price,@AvailableTickets)";
@@ -96,6 +100,7 @@ namespace FestivalProject
             return affected;
         }
 
+        //Een bestaand tickettype bewerken
         public static int EditTicketType(TicketType tType) 
         {
             String sSQL = "Update TicketType Set Name=@Name, Price=@Price, AvailableTickets=@AvailableTickets WHERE ID=@Id";
@@ -118,6 +123,7 @@ namespace FestivalProject
             return affected;
         }
 
+        //Het aantal beschikbare tickets van een bepaald tickettype berekenen en teruggeven
         public static int ChangeAvailableTickets(TicketType ticketType, int VerkochteTickets) 
         {
             String sSQL = "Update TicketType Set AvailableTickets=@AvailableTickets WHERE ID=@ID";
@@ -136,6 +142,7 @@ namespace FestivalProject
             return affected;
         }
 
+        //DATAVALIDATIE
         public string Error
         {
             get { return null; }

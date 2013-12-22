@@ -118,8 +118,6 @@ namespace FestivalProject.ViewModel
             set { _hourUntil = value; OnPropertyChanged("HourUntil"); }
         }
         
-        
-        
         //Constructor
         public LRoosterVM()
         {
@@ -129,7 +127,6 @@ namespace FestivalProject.ViewModel
             Bands = Band.GetBands();
             NewLineUp = new LineUp();
         }
-
 
         //Methode om aantal dagen te berekenen tussen begin en einddata
         private ObservableCollection<DateTime> BerekenData() 

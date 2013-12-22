@@ -44,7 +44,6 @@ namespace FestivalProject.ViewModel
             get { return _ticketType; }
             set { _ticketType = value; OnPropertyChanged("TicketType"); }
         }
-        
 
         //Constructor die properties initialiseert
         public TTypesVM()

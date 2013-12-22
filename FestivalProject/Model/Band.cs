@@ -14,6 +14,7 @@ namespace FestivalProject
 {
     public class Band : IDataErrorInfo
     {
+        //Properties
         private String _id;
 
         public String Id
@@ -43,7 +44,7 @@ namespace FestivalProject
         private String _description;
 
         [Required(ErrorMessage = "Geef een beschrijving op.")]
-        [StringLength(5000, MinimumLength = 3, ErrorMessage = "Meer dan 3 karakters nodig.")]
+        [StringLength(50000, MinimumLength = 3, ErrorMessage = "Meer dan 3 karakters nodig.")]
         public String Description
         {
             get { return _description; }
@@ -85,7 +86,7 @@ private ObservableCollection<Genre> _genres;
         set { _pictureByte = value; }
     }
     
-
+        //Bands ophalen uit database
     public static ObservableCollection<Band> GetBands() 
     {
         ObservableCollection<Band> bands = new ObservableCollection<Band>();
@@ -102,6 +103,7 @@ private ObservableCollection<Genre> _genres;
         return bands;
     }
 
+        //Creeer een nieuwe band 
     private static Band Create(IDataRecord record)
     {
         return new Band() 
@@ -115,6 +117,7 @@ private ObservableCollection<Genre> _genres;
         };
     }
 
+        //Genres ophalen per band
     public static ObservableCollection<Genre> GetGenresByBand(ObservableCollection<Genre> l, String IdBand) 
     {
         ObservableCollection<Genre> genres = new ObservableCollection<Genre>();
@@ -136,6 +139,7 @@ private ObservableCollection<Genre> _genres;
 
     }
 
+        //Het id van de band ophalen door zijn naam
     public static Band GetBandIdByName(String BandName)
     {
         ObservableCollection<Band> l = Band.GetBands();
@@ -148,6 +152,7 @@ private ObservableCollection<Genre> _genres;
         return null;
     }
 
+        //Band teruggeven door zijn id
     public static Band GetBandById(ObservableCollection<Band> l, int IdBand) 
     {
         foreach (Band band in l) 
@@ -160,6 +165,7 @@ private ObservableCollection<Genre> _genres;
         return null;
     }
 
+        //Een nieuwe band toevoegen in de database
     public static int AddBand(Band band)
     {
         String sSQL = "INSERT INTO Band(Name, Picture, [Description], Twitter, Facebook) VALUES(@Name, @Picture, @Description, @Twitter, @Facebook)";
@@ -183,6 +189,7 @@ private ObservableCollection<Genre> _genres;
         int affected = Database.ModifyData(sSQL, pars);
 
         //OOK NOG DE GENRES TOEVOEGEN!
+        //Dit kunnen we doen door een inner join met 2 tabellen
         String subSQL = "INSERT INTO Band_Genre(BandId, GenreId) VALUES(@BandId, @GenreId)";
         foreach (Genre genre in band.Genres) 
         {
@@ -201,6 +208,7 @@ private ObservableCollection<Genre> _genres;
         return affected;
     }
 
+        //Een bestaande band bewerken
     public static int EditBand(Band band) 
     {
         String sSQL = "Update Band Set Name=@Name,Picture=@Picture,Description=@Description WHERE ID=@ID";
@@ -223,6 +231,7 @@ private ObservableCollection<Genre> _genres;
         return affected;
     }
 
+        //DATAVALIDATIE
     public string Error
     {
         get { return null; }

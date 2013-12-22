@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace FestivalProject
 {
+    //Properties
     public class LineUp : IDataErrorInfo
     {
         private String _id;
@@ -63,6 +64,7 @@ namespace FestivalProject
             set { _band = value; }
         }
 
+        //Alle lineups ophalen uit database
         public static ObservableCollection<LineUp> GetLineUp() 
         {
             ObservableCollection<LineUp> lineUps = new ObservableCollection<LineUp>();
@@ -86,6 +88,7 @@ namespace FestivalProject
             return lineUps;
         }
 
+        //Een nieuwe line up creeren
         private static LineUp Create(IDataRecord record, Band band, Stage stage)
         {
             return new LineUp() 
@@ -99,6 +102,7 @@ namespace FestivalProject
             };
         }
 
+        //Een nieuwe line up maken van een stage
         private static LineUp CreateLineUpFromStage(IDataRecord record, Band band) 
         {
             return new LineUp()
@@ -111,6 +115,7 @@ namespace FestivalProject
             };
         }
 
+        //Een lineup ophalen dmv stage en dag
         public static ObservableCollection<LineUp> GetLineUpByStageAndDay(Stage stage, DateTime? dag)
         {
             ObservableCollection<LineUp> LineUp = new ObservableCollection<LineUp>();
@@ -139,6 +144,7 @@ namespace FestivalProject
 
         }
 
+        //Een nieuwe line up toevoegen in database
         public static int AddLineUp(LineUp lineUp)
         {
             String sSQL = "INSERT INTO LineUp(Date, [From], Until, Stage, Band) VALUES(@Date, @From, @Until, @Stage, @Band)";
@@ -164,6 +170,7 @@ namespace FestivalProject
             return affected;
         }
 
+        //Een bestaande line up verwijderen
         public static int DeleteLineUp(LineUp lineUp)
         {
             String sSQL = "DELETE FROM LineUp WHERE Id=@Id";
@@ -177,6 +184,7 @@ namespace FestivalProject
             return affected;
         }
 
+        //Een bestaande line up bewerken
         public static int EditLineUp(LineUp lineUp)
         {
             String sSQL = "Update LineUp SET Date=@Date, [From]=@From, Until=@Until, Stage=@Stage, Band=@Band WHERE ID=@ID";
@@ -205,6 +213,7 @@ namespace FestivalProject
             return affected;
         }
 
+        //DATAVALIDATIE
         public string Error
         {
             get { return null; }

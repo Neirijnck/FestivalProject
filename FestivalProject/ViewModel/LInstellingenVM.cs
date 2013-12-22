@@ -18,6 +18,7 @@ namespace FestivalProject.ViewModel
         {
             get { return "Instellingen"; }
         }
+
         //Property voor festival
         private ObservableCollection<Festival> _festivals;
 
@@ -26,7 +27,6 @@ namespace FestivalProject.ViewModel
             get { return _festivals; }
             set { _festivals = value; OnPropertyChanged("Festivals"); }
         }
-        
 
         //Property om alle stages in te lezen
         private ObservableCollection<Stage> _stages;
@@ -72,6 +72,7 @@ namespace FestivalProject.ViewModel
             get { return _selectedEndDate; }
             set { _selectedEndDate = value; OnPropertyChanged("SelectedEndDate"); }
         }
+
         //Property om de uiteindelijk datum weer te geven in textbox
         private String _fullDate;
 
