@@ -270,12 +270,12 @@ namespace FestivalProject.ViewModel
         {
             get 
             {
-                return new RelayCommand(ControleerData);
+                return new RelayCommand<Button>(ControleerData);
             }
         }
 
         //Method om de data te controleren
-        private void ControleerData()
+        private void ControleerData(Button btnData)
         {
             String Date1 = "";
             String Date2 = "";
@@ -308,12 +308,15 @@ namespace FestivalProject.ViewModel
                 FestivalData.StartDate = EersteDatum;
                 FestivalData.EndDate = TweedeDatum;
                 Console.WriteLine("Data is OK!");
+                btnData.IsEnabled = true;
             }
             else 
             {
                 Console.WriteLine("Data verkeerd!");
+
                 //Data is niet ok, button moet gedisabled worden!!!
                 //FestivalData.IsValid = false;
+                btnData.IsEnabled = false;
             }
         }
     }

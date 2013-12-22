@@ -62,7 +62,7 @@
 
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectedDateChanged">
-                    <cmd:EventToCommand Command="{Binding ControlDates}"/>
+                    <cmd:EventToCommand Command="{Binding ControlDates}" CommandParameter="{Binding ElementName=btnBevestigen}"/>
                 </i:EventTrigger>
             </i:Interaction.Triggers>
 
@@ -79,7 +79,7 @@
 
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectedDateChanged">
-                    <cmd:EventToCommand Command="{Binding ControlDates}" />
+                    <cmd:EventToCommand Command="{Binding ControlDates}" CommandParameter="{Binding ElementName=btnBevestigen}"/>
                 </i:EventTrigger>
             </i:Interaction.Triggers>
 
