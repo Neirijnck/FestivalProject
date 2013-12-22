@@ -13,15 +13,41 @@
     </UserControl.DataContext>
     
     <Grid Style="{StaticResource ContentRoot}">
+        <Grid>
+            <Grid.Resources>
+                <Style TargetType="{x:Type TextBlock}">
+                    <Setter Property="VerticalAlignment" Value="Center" />
+                    <Setter Property="Margin" Value="5" />
+                </Style>
+            </Grid.Resources>
 
-        <mui:ModernTab Links="{Binding Links}" SelectedSource="{Binding SelectedSource}" Layout="Tab" >
+            <ListBox Grid.Column="0" Grid.RowSpan="3" x:Name="Stages" ItemsSource="{Binding Stages}" DisplayMemberPath="Name" SelectedItem="{Binding SelectedStage}"/>
 
-        </mui:ModernTab>
-        <ItemsControl ItemsSource="{Binding DagOverzichten}">
-            <DataTemplate>
-                
-            </DataTemplate>
-        </ItemsControl>
+            <TextBlock Text="" 
+                   Grid.Row="0" Grid.Column="1"
+                   />
+            <TextBlock Text=""
+                   Grid.Row="0" Grid.Column="2"
+                   />
+            <TextBlock Text=""
+                   Grid.Row="1" Grid.Column="1"
+                   />
+            <TextBlock Text=""
+                   Grid.Row="1" Grid.Column="2"
+                   />
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="175"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+        </Grid>
     </Grid>
     
 

@@ -167,10 +167,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\LODag1.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="View\LOverzicht.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -208,9 +204,6 @@
     </Compile>
     <Compile Include="View\LInstellingen.xaml.cs">
       <DependentUpon>LInstellingen.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\LODag1.xaml.cs">
-      <DependentUpon>LODag1.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\LOverzicht.xaml.cs">
       <DependentUpon>LOverzicht.xaml</DependentUpon>
