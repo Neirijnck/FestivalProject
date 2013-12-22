@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace FestivalProject.ViewModel
 {
@@ -52,6 +53,24 @@ namespace FestivalProject.ViewModel
             set { _dagen = value; OnPropertyChanged("Dagen"); }
         }
 
+        //Geselecteerde dag
+        private DateTime? _selectedDay;
+
+        public DateTime? SelectedDay
+        {
+            get { return _selectedDay; }
+            set { _selectedDay = value; OnPropertyChanged("SelectedDay"); }
+        }
+
+        //Property voor line up
+        private ObservableCollection<LineUp> _lineUps;
+
+        public ObservableCollection<LineUp> LineUps
+        {
+            get { return _lineUps; }
+            set { _lineUps = value; OnPropertyChanged("LineUps"); }
+        }
+
         //Constructor
         public LOverzichtVM()
         {
@@ -59,6 +78,23 @@ namespace FestivalProject.ViewModel
             Stages = Stage.GetStages();
             SelectedStage = Stages[0];
             Dagen = BerekenData();
+        }
+
+        //Command om line up te tonen
+        public ICommand ToonLineUpCommand 
+        {
+            get 
+            {
+                return new RelayCommand(ToonLineUp);
+            }
+        }
+
+        private void ToonLineUp(object obj)
+        {
+            if (SelectedDay != null && SelectedStage != null)
+            {
+                LineUps = LineUp.GetLineUpByStageAndDay(SelectedStage, SelectedDay);
+            }
         }
 
         //Methode om aantal dagen te berekenen tussen begin en einddata
