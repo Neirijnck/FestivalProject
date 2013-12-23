@@ -87,20 +87,24 @@ private ObservableCollection<Genre> _genres;
     }
     
         //Bands ophalen uit database
-    public static ObservableCollection<Band> GetBands() 
+    public static ObservableCollection<Band> GetBands()
     {
         ObservableCollection<Band> bands = new ObservableCollection<Band>();
         ObservableCollection<Genre> genres = Genre.GetGenres();
-        DbDataReader reader = Database.GetData("SELECT * From Band");
-
-        while (reader.Read()) 
+        try
         {
-            Band band = Create(reader);
-            band.Genres = Band.GetGenresByBand(genres, band.Id);
-            bands.Add(band);
+            DbDataReader reader = Database.GetData("SELECT * From Band");
+
+            while (reader.Read())
+            {
+                Band band = Create(reader);
+                band.Genres = Band.GetGenresByBand(genres, band.Id);
+                bands.Add(band);
+            }
+            reader.Close();
+            return bands;
         }
-        reader.Close();
-        return bands;
+        catch (Exception ex) { Console.WriteLine(ex.Message); return null; }
     }
 
         //Creeer een nieuwe band 
@@ -122,20 +126,24 @@ private ObservableCollection<Genre> _genres;
     {
         ObservableCollection<Genre> genres = new ObservableCollection<Genre>();
 
-        String sql = "SELECT * FROM Band_Genre WHERE BandId=@BandId";
-
-        DbParameter idPar = Database.AddParameter("@BandId", IdBand);
-
-        DbDataReader reader = Database.GetData(sql, idPar);
-        
-        while (reader.Read())
+        try
         {
-            int GenreId = int.Parse(reader["GenreId"].ToString());
-            Genre genre = Genre.GetGenreById(l, GenreId);
-            genres.Add(genre);
+            String sql = "SELECT * FROM Band_Genre WHERE BandId=@BandId";
+
+            DbParameter idPar = Database.AddParameter("@BandId", IdBand);
+
+            DbDataReader reader = Database.GetData(sql, idPar);
+
+            while (reader.Read())
+            {
+                int GenreId = int.Parse(reader["GenreId"].ToString());
+                Genre genre = Genre.GetGenreById(l, GenreId);
+                genres.Add(genre);
+            }
+            reader.Close();
+            return genres;
         }
-        reader.Close();
-        return genres;
+        catch (Exception ex) { Console.WriteLine(ex.Message); return null; }
 
     }
 
@@ -168,67 +176,75 @@ private ObservableCollection<Genre> _genres;
         //Een nieuwe band toevoegen in de database
     public static int AddBand(Band band)
     {
-        String sSQL = "INSERT INTO Band(Name, Picture, [Description], Twitter, Facebook) VALUES(@Name, @Picture, @Description, @Twitter, @Facebook)";
-
-        DbParameter par1 = Database.AddParameter("@Name", band.Name);
-        if (par1.Value == null) par1.Value = DBNull.Value;
-
-        DbParameter par2 = Database.AddParameter("@Picture", band.Picture);
-        if (par2.Value == null) par2.Value = DBNull.Value;
-
-        DbParameter par3 = Database.AddParameter("@Description", band.Description);
-        if (par3.Value == null) par3.Value = DBNull.Value;
-
-        DbParameter par4 = Database.AddParameter("@Twitter", band.Twitter);
-        if (par4.Value == null) par4.Value = DBNull.Value;
-
-        DbParameter par5 = Database.AddParameter("@Facebook", band.Facebook);
-        if (par5.Value == null) par5.Value = DBNull.Value;
-
-        DbParameter[] pars = new DbParameter[] { par1, par2, par3, par4, par5 };
-        int affected = Database.ModifyData(sSQL, pars);
-
-        //OOK NOG DE GENRES TOEVOEGEN!
-        //Dit kunnen we doen door een inner join met 2 tabellen
-        String subSQL = "INSERT INTO Band_Genre(BandId, GenreId) VALUES(@BandId, @GenreId)";
-        foreach (Genre genre in band.Genres) 
+        try
         {
-            Band bandID = Band.GetBandIdByName(band.Name);
-            DbParameter par7 = Database.AddParameter("@BandId", bandID.Id);
-            if (par7.Value == null) par7.Value = DBNull.Value;
+            String sSQL = "INSERT INTO Band(Name, Picture, [Description], Twitter, Facebook) VALUES(@Name, @Picture, @Description, @Twitter, @Facebook)";
 
-            Genre genreID = Genre.GetGenreIdByName(genre.Name);
-            DbParameter par8 = Database.AddParameter("@GenreId", genreID.Id);
-            if (par8.Value == null) par8.Value = DBNull.Value;
+            DbParameter par1 = Database.AddParameter("@Name", band.Name);
+            if (par1.Value == null) par1.Value = DBNull.Value;
 
-            DbParameter[] pars2 = new DbParameter[] { par7, par8 };
-            Database.ModifyData(subSQL, pars2);
+            DbParameter par2 = Database.AddParameter("@Picture", band.Picture);
+            if (par2.Value == null) par2.Value = DBNull.Value;
+
+            DbParameter par3 = Database.AddParameter("@Description", band.Description);
+            if (par3.Value == null) par3.Value = DBNull.Value;
+
+            DbParameter par4 = Database.AddParameter("@Twitter", band.Twitter);
+            if (par4.Value == null) par4.Value = DBNull.Value;
+
+            DbParameter par5 = Database.AddParameter("@Facebook", band.Facebook);
+            if (par5.Value == null) par5.Value = DBNull.Value;
+
+            DbParameter[] pars = new DbParameter[] { par1, par2, par3, par4, par5 };
+            int affected = Database.ModifyData(sSQL, pars);
+
+            //OOK NOG DE GENRES TOEVOEGEN!
+            //Dit kunnen we doen door een inner join met 2 tabellen
+            String subSQL = "INSERT INTO Band_Genre(BandId, GenreId) VALUES(@BandId, @GenreId)";
+            foreach (Genre genre in band.Genres)
+            {
+                Band bandID = Band.GetBandIdByName(band.Name);
+                DbParameter par7 = Database.AddParameter("@BandId", bandID.Id);
+                if (par7.Value == null) par7.Value = DBNull.Value;
+
+                Genre genreID = Genre.GetGenreIdByName(genre.Name);
+                DbParameter par8 = Database.AddParameter("@GenreId", genreID.Id);
+                if (par8.Value == null) par8.Value = DBNull.Value;
+
+                DbParameter[] pars2 = new DbParameter[] { par7, par8 };
+                Database.ModifyData(subSQL, pars2);
+            }
+
+            return affected;
         }
-
-        return affected;
+        catch (Exception ex) { Console.WriteLine(ex.Message); return 0; }
     }
 
         //Een bestaande band bewerken
     public static int EditBand(Band band) 
     {
-        String sSQL = "Update Band Set Name=@Name,Picture=@Picture,Description=@Description WHERE ID=@ID";
+        try
+        {
+            String sSQL = "Update Band Set Name=@Name,Picture=@Picture,Description=@Description WHERE ID=@ID";
 
-        DbParameter par1 = Database.AddParameter("@Name", band.Name);
-        if (par1.Value == null) par1.Value = DBNull.Value;
+            DbParameter par1 = Database.AddParameter("@Name", band.Name);
+            if (par1.Value == null) par1.Value = DBNull.Value;
 
-        DbParameter par2 = Database.AddParameter("@Description", band.Description);
-        if (par2.Value == null) par2.Value = DBNull.Value;
+            DbParameter par2 = Database.AddParameter("@Description", band.Description);
+            if (par2.Value == null) par2.Value = DBNull.Value;
 
-        DbParameter par3 = Database.AddParameter("@ID", band.Id);
-        if (par3.Value == null) par3.Value = DBNull.Value;
+            DbParameter par3 = Database.AddParameter("@ID", band.Id);
+            if (par3.Value == null) par3.Value = DBNull.Value;
 
-        DbParameter par4 = Database.AddParameter("@Picture", band.Picture);
-        if (par4.Value == null) par4.Value = DBNull.Value;
+            DbParameter par4 = Database.AddParameter("@Picture", band.Picture);
+            if (par4.Value == null) par4.Value = DBNull.Value;
 
-        DbParameter[] pars = new DbParameter[] { par1, par2, par3, par4 };
-        int affected = Database.ModifyData(sSQL, pars);
+            DbParameter[] pars = new DbParameter[] { par1, par2, par3, par4 };
+            int affected = Database.ModifyData(sSQL, pars);
 
-        return affected;
+            return affected;
+        }
+        catch (Exception ex) { Console.WriteLine(ex.Message); return 0; }
     }
 
         //DATAVALIDATIE

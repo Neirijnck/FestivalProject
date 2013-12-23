@@ -56,16 +56,20 @@ namespace FestivalProject
         //Alle verschillende tickettypes ophalen
         public static ObservableCollection<TicketType> GetTicketTypes() 
         {
-            ObservableCollection<TicketType> ticketTypes = new ObservableCollection<TicketType>();
-            DbDataReader reader = Database.GetData("SELECT * FROM TicketType");
-
-            while (reader.Read()) 
+            try
             {
-                TicketType ticketType = Create(reader);
-                ticketTypes.Add(ticketType);
+                ObservableCollection<TicketType> ticketTypes = new ObservableCollection<TicketType>();
+                DbDataReader reader = Database.GetData("SELECT * FROM TicketType");
+
+                while (reader.Read())
+                {
+                    TicketType ticketType = Create(reader);
+                    ticketTypes.Add(ticketType);
+                }
+                reader.Close();
+                return ticketTypes;
             }
-            reader.Close();
-            return ticketTypes;
+            catch (Exception ex) { Console.WriteLine(ex.Message); return null; }
         }
 
         //Een nieuw tickettype creeren
@@ -83,63 +87,75 @@ namespace FestivalProject
         //Een nieuw tickettype toevoegen
         public static int AddTicketType(TicketType Type) 
         {
-            String sSQL = "INSERT INTO TicketType(Name, Price, AvailableTickets) VALUES(@Name,@Price,@AvailableTickets)";
+            try
+            {
+                String sSQL = "INSERT INTO TicketType(Name, Price, AvailableTickets) VALUES(@Name,@Price,@AvailableTickets)";
 
-            DbParameter par1 = Database.AddParameter("@Name", Type.Name);
-            if (par1.Value == null) par1.Value = DBNull.Value;
+                DbParameter par1 = Database.AddParameter("@Name", Type.Name);
+                if (par1.Value == null) par1.Value = DBNull.Value;
 
-            DbParameter par2 = Database.AddParameter("@Price", Type.Price);
-            if (par2.Value == null) par2.Value = DBNull.Value;
+                DbParameter par2 = Database.AddParameter("@Price", Type.Price);
+                if (par2.Value == null) par2.Value = DBNull.Value;
 
-            DbParameter par3 = Database.AddParameter("@AvailableTickets", Type.AvailableTickets);
-            if (par3.Value == null) par3.Value = DBNull.Value;
+                DbParameter par3 = Database.AddParameter("@AvailableTickets", Type.AvailableTickets);
+                if (par3.Value == null) par3.Value = DBNull.Value;
 
-            DbParameter[] pars = new DbParameter[] { par1, par2, par3};
-            int affected = Database.ModifyData(sSQL, pars);
+                DbParameter[] pars = new DbParameter[] { par1, par2, par3 };
+                int affected = Database.ModifyData(sSQL, pars);
 
-            return affected;
+                return affected;
+            }
+            catch (Exception ex) { Console.WriteLine(ex.Message); return 0; }
         }
 
         //Een bestaand tickettype bewerken
         public static int EditTicketType(TicketType tType) 
         {
-            String sSQL = "Update TicketType Set Name=@Name, Price=@Price, AvailableTickets=@AvailableTickets WHERE ID=@Id";
+            try
+            {
+                String sSQL = "Update TicketType Set Name=@Name, Price=@Price, AvailableTickets=@AvailableTickets WHERE ID=@Id";
 
-            DbParameter par1 = Database.AddParameter("@Name", tType.Name);
-            if (par1.Value == null) par1.Value = DBNull.Value;
+                DbParameter par1 = Database.AddParameter("@Name", tType.Name);
+                if (par1.Value == null) par1.Value = DBNull.Value;
 
-            DbParameter par2 = Database.AddParameter("@Id", tType.Id);
-            if (par2.Value == null) par2.Value = DBNull.Value;
+                DbParameter par2 = Database.AddParameter("@Id", tType.Id);
+                if (par2.Value == null) par2.Value = DBNull.Value;
 
-            DbParameter par3 = Database.AddParameter("@Price", tType.Price);
-            if (par3.Value == null) par3.Value = DBNull.Value;
+                DbParameter par3 = Database.AddParameter("@Price", tType.Price);
+                if (par3.Value == null) par3.Value = DBNull.Value;
 
-            DbParameter par4 = Database.AddParameter("@AvailableTickets", tType.AvailableTickets);
-            if (par4.Value == null) par4.Value = DBNull.Value;
+                DbParameter par4 = Database.AddParameter("@AvailableTickets", tType.AvailableTickets);
+                if (par4.Value == null) par4.Value = DBNull.Value;
 
-            DbParameter[] pars = new DbParameter[] { par1, par2, par3, par4 };
-            int affected = Database.ModifyData(sSQL, pars);
+                DbParameter[] pars = new DbParameter[] { par1, par2, par3, par4 };
+                int affected = Database.ModifyData(sSQL, pars);
 
-            return affected;
+                return affected;
+            }
+            catch (Exception ex) { Console.WriteLine(ex.Message); return 0; }
         }
 
         //Het aantal beschikbare tickets van een bepaald tickettype berekenen en teruggeven
         public static int ChangeAvailableTickets(TicketType ticketType, int VerkochteTickets) 
         {
-            String sSQL = "Update TicketType Set AvailableTickets=@AvailableTickets WHERE ID=@ID";
+            try
+            {
+                String sSQL = "Update TicketType Set AvailableTickets=@AvailableTickets WHERE ID=@ID";
 
-            int resterendeTickets = ticketType.AvailableTickets - VerkochteTickets;
+                int resterendeTickets = ticketType.AvailableTickets - VerkochteTickets;
 
-            DbParameter par1 = Database.AddParameter("@AvailableTickets", resterendeTickets);
-            if (par1.Value == null) par1.Value = DBNull.Value;
+                DbParameter par1 = Database.AddParameter("@AvailableTickets", resterendeTickets);
+                if (par1.Value == null) par1.Value = DBNull.Value;
 
-            DbParameter par2 = Database.AddParameter("@ID", ticketType.Id);
-            if (par2.Value == null) par2.Value = DBNull.Value;
+                DbParameter par2 = Database.AddParameter("@ID", ticketType.Id);
+                if (par2.Value == null) par2.Value = DBNull.Value;
 
-            DbParameter[] pars = new DbParameter[] { par1, par2 };
-            int affected = Database.ModifyData(sSQL, pars);
+                DbParameter[] pars = new DbParameter[] { par1, par2 };
+                int affected = Database.ModifyData(sSQL, pars);
 
-            return affected;
+                return affected;
+            }
+            catch (Exception ex) { Console.WriteLine(ex.Message); return 0; }
         }
 
         //DATAVALIDATIE

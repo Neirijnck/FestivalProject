@@ -67,25 +67,29 @@ namespace FestivalProject
         //Alle lineups ophalen uit database
         public static ObservableCollection<LineUp> GetLineUp() 
         {
-            ObservableCollection<LineUp> lineUps = new ObservableCollection<LineUp>();
-            ObservableCollection<Band> lB = new ObservableCollection<Band>();
-            ObservableCollection<Stage> lS = new ObservableCollection<Stage>();
-
-            DbDataReader reader = Database.GetData("SELECT * FROM LineUp");
-
-            while (reader.Read()) 
+            try
             {
-                int IdBand = int.Parse(reader["Band"].ToString());
-                int IdStage = int.Parse(reader["Stage"].ToString());
-                Band band = Band.GetBandById(lB, IdBand);
-                Stage stage = Stage.GetStageById(lS, IdStage);
+                ObservableCollection<LineUp> lineUps = new ObservableCollection<LineUp>();
+                ObservableCollection<Band> lB = new ObservableCollection<Band>();
+                ObservableCollection<Stage> lS = new ObservableCollection<Stage>();
+
+                DbDataReader reader = Database.GetData("SELECT * FROM LineUp");
+
+                while (reader.Read())
+                {
+                    int IdBand = int.Parse(reader["Band"].ToString());
+                    int IdStage = int.Parse(reader["Stage"].ToString());
+                    Band band = Band.GetBandById(lB, IdBand);
+                    Stage stage = Stage.GetStageById(lS, IdStage);
 
 
-                LineUp lineUp = Create(reader, band, stage);
-                lineUps.Add(lineUp);
+                    LineUp lineUp = Create(reader, band, stage);
+                    lineUps.Add(lineUp);
+                }
+                reader.Close();
+                return lineUps;
             }
-            reader.Close();
-            return lineUps;
+            catch (Exception ex) { Console.WriteLine(ex.Message); return null; }
         }
 
         //Een nieuwe line up creeren
@@ -118,99 +122,115 @@ namespace FestivalProject
         //Een lineup ophalen dmv stage en dag
         public static ObservableCollection<LineUp> GetLineUpByStageAndDay(Stage stage, DateTime? dag)
         {
-            ObservableCollection<LineUp> LineUp = new ObservableCollection<LineUp>();
-            ObservableCollection<Band> lB = Band.GetBands();
-
-            String sql = "SELECT * FROM LineUp WHERE Stage=@StageId AND Date=@Date ORDER BY [FROM] asc";
-
-            DbParameter par1 = Database.AddParameter("@StageId", stage.Id);
-            if (par1.Value == null) par1.Value = DBNull.Value;
-
-            DbParameter par2 = Database.AddParameter("@Date", dag);
-            if (par2.Value == null) par2.Value = DBNull.Value;
-
-            DbParameter[] pars = new DbParameter[] { par1, par2 };
-            DbDataReader reader = Database.GetData(sql, pars);
-
-            while (reader.Read())
+            try
             {
-                int IdBand = int.Parse(reader["Band"].ToString());
-                Band band = Band.GetBandById(lB, IdBand);
-                LineUp lineup = CreateLineUpFromStage(reader, band);
-                LineUp.Add(lineup);
+                ObservableCollection<LineUp> LineUp = new ObservableCollection<LineUp>();
+                ObservableCollection<Band> lB = Band.GetBands();
+
+                String sql = "SELECT * FROM LineUp WHERE Stage=@StageId AND Date=@Date ORDER BY [FROM] asc";
+
+                DbParameter par1 = Database.AddParameter("@StageId", stage.Id);
+                if (par1.Value == null) par1.Value = DBNull.Value;
+
+                DbParameter par2 = Database.AddParameter("@Date", dag);
+                if (par2.Value == null) par2.Value = DBNull.Value;
+
+                DbParameter[] pars = new DbParameter[] { par1, par2 };
+                DbDataReader reader = Database.GetData(sql, pars);
+
+                while (reader.Read())
+                {
+                    int IdBand = int.Parse(reader["Band"].ToString());
+                    Band band = Band.GetBandById(lB, IdBand);
+                    LineUp lineup = CreateLineUpFromStage(reader, band);
+                    LineUp.Add(lineup);
+                }
+                reader.Close();
+                return LineUp;
             }
-            reader.Close();
-            return LineUp;
+            catch (Exception ex) { Console.WriteLine(ex.Message); return null; }
 
         }
 
         //Een nieuwe line up toevoegen in database
         public static int AddLineUp(LineUp lineUp)
         {
-            String sSQL = "INSERT INTO LineUp(Date, [From], Until, Stage, Band) VALUES(@Date, @From, @Until, @Stage, @Band)";
+            try
+            {
+                String sSQL = "INSERT INTO LineUp(Date, [From], Until, Stage, Band) VALUES(@Date, @From, @Until, @Stage, @Band)";
 
-            DbParameter par1 = Database.AddParameter("@Date", lineUp.Date);
-            if (par1.Value == null) par1.Value = DBNull.Value;
+                DbParameter par1 = Database.AddParameter("@Date", lineUp.Date);
+                if (par1.Value == null) par1.Value = DBNull.Value;
 
-            DbParameter par2 = Database.AddParameter("@From", lineUp.From);
-            if (par2.Value == null) par2.Value = DBNull.Value;
+                DbParameter par2 = Database.AddParameter("@From", lineUp.From);
+                if (par2.Value == null) par2.Value = DBNull.Value;
 
-            DbParameter par3 = Database.AddParameter("@Until", lineUp.Until);
-            if (par3.Value == null) par3.Value = DBNull.Value;
+                DbParameter par3 = Database.AddParameter("@Until", lineUp.Until);
+                if (par3.Value == null) par3.Value = DBNull.Value;
 
-            DbParameter par4 = Database.AddParameter("@Stage", lineUp.Stage.Id);
-            if (par4.Value == null) par4.Value = DBNull.Value;
+                DbParameter par4 = Database.AddParameter("@Stage", lineUp.Stage.Id);
+                if (par4.Value == null) par4.Value = DBNull.Value;
 
-            DbParameter par5 = Database.AddParameter("@Band", lineUp.Band.Id);
-            if (par5.Value == null) par5.Value = DBNull.Value;
+                DbParameter par5 = Database.AddParameter("@Band", lineUp.Band.Id);
+                if (par5.Value == null) par5.Value = DBNull.Value;
 
-            DbParameter[] pars = new DbParameter[] { par1, par2, par3, par4, par5 };
-            int affected = Database.ModifyData(sSQL, pars);
+                DbParameter[] pars = new DbParameter[] { par1, par2, par3, par4, par5 };
+                int affected = Database.ModifyData(sSQL, pars);
 
-            return affected;
+                return affected;
+            }
+            catch (Exception ex) { Console.WriteLine(ex.Message); return 0; }
         }
 
         //Een bestaande line up verwijderen
         public static int DeleteLineUp(LineUp lineUp)
         {
-            String sSQL = "DELETE FROM LineUp WHERE Id=@Id";
+            try
+            {
+                String sSQL = "DELETE FROM LineUp WHERE Id=@Id";
 
-            DbParameter par1 = Database.AddParameter("@Id", lineUp.Id);
-            if (par1.Value == null) par1.Value = DBNull.Value;
+                DbParameter par1 = Database.AddParameter("@Id", lineUp.Id);
+                if (par1.Value == null) par1.Value = DBNull.Value;
 
-            DbParameter[] pars = new DbParameter[] { par1 };
-            int affected = Database.ModifyData(sSQL, pars);
+                DbParameter[] pars = new DbParameter[] { par1 };
+                int affected = Database.ModifyData(sSQL, pars);
 
-            return affected;
+                return affected;
+            }
+            catch (Exception ex) { Console.WriteLine(ex.Message); return 0; }
         }
 
         //Een bestaande line up bewerken
         public static int EditLineUp(LineUp lineUp)
         {
-            String sSQL = "Update LineUp SET Date=@Date, [From]=@From, Until=@Until, Stage=@Stage, Band=@Band WHERE ID=@ID";
+            try
+            {
+                String sSQL = "Update LineUp SET Date=@Date, [From]=@From, Until=@Until, Stage=@Stage, Band=@Band WHERE ID=@ID";
 
-            DbParameter par1 = Database.AddParameter("@Date", lineUp.Date);
-            if (par1.Value == null) par1.Value = DBNull.Value;
+                DbParameter par1 = Database.AddParameter("@Date", lineUp.Date);
+                if (par1.Value == null) par1.Value = DBNull.Value;
 
-            DbParameter par2 = Database.AddParameter("@From", lineUp.From);
-            if (par2.Value == null) par2.Value = DBNull.Value;
+                DbParameter par2 = Database.AddParameter("@From", lineUp.From);
+                if (par2.Value == null) par2.Value = DBNull.Value;
 
-            DbParameter par3 = Database.AddParameter("@Until", lineUp.Until);
-            if (par3.Value == null) par3.Value = DBNull.Value;
+                DbParameter par3 = Database.AddParameter("@Until", lineUp.Until);
+                if (par3.Value == null) par3.Value = DBNull.Value;
 
-            DbParameter par4 = Database.AddParameter("@Stage", lineUp.Stage.Id);
-            if (par4.Value == null) par4.Value = DBNull.Value;
+                DbParameter par4 = Database.AddParameter("@Stage", lineUp.Stage.Id);
+                if (par4.Value == null) par4.Value = DBNull.Value;
 
-            DbParameter par5 = Database.AddParameter("@Band", lineUp.Band.Id);
-            if (par5.Value == null) par5.Value = DBNull.Value;
+                DbParameter par5 = Database.AddParameter("@Band", lineUp.Band.Id);
+                if (par5.Value == null) par5.Value = DBNull.Value;
 
-            DbParameter par6 = Database.AddParameter("@ID", lineUp.Id);
-            if (par6.Value == null) par6.Value = DBNull.Value;
+                DbParameter par6 = Database.AddParameter("@ID", lineUp.Id);
+                if (par6.Value == null) par6.Value = DBNull.Value;
 
-            DbParameter[] pars = new DbParameter[] { par1, par2, par3, par4, par5, par6 };
-            int affected = Database.ModifyData(sSQL, pars);
+                DbParameter[] pars = new DbParameter[] { par1, par2, par3, par4, par5, par6 };
+                int affected = Database.ModifyData(sSQL, pars);
 
-            return affected;
+                return affected;
+            }
+            catch (Exception ex) { Console.WriteLine(ex.Message); return 0; }
         }
 
         //DATAVALIDATIE

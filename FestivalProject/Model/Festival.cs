@@ -64,16 +64,20 @@ namespace FestivalProject
         //Alle bestaande festivals ophalen
         public static ObservableCollection<Festival> GetFestivals() 
         {
-            ObservableCollection<Festival> festivals = new ObservableCollection<Festival>();
-            DbDataReader reader = Database.GetData("SELECT * FROM Festival");
-
-            while (reader.Read()) 
+            try
             {
-                Festival festival = Create(reader);
-                festivals.Add(festival);
+                ObservableCollection<Festival> festivals = new ObservableCollection<Festival>();
+                DbDataReader reader = Database.GetData("SELECT * FROM Festival");
+
+                while (reader.Read())
+                {
+                    Festival festival = Create(reader);
+                    festivals.Add(festival);
+                }
+                reader.Close();
+                return festivals;
             }
-            reader.Close();
-            return festivals;
+            catch (Exception ex) { Console.WriteLine(ex.Message); return null; }
         }
 
         //Een nieuw festival aanmaken
@@ -89,35 +93,43 @@ namespace FestivalProject
         //Een bestaand festival aanpassen
         public static int EditFestival(Festival festivaldata) 
         {
-            String sSQL = "Update Festival Set StartDate=@StartDate, EndDate=@EndDate ";
+            try
+            {
+                String sSQL = "Update Festival Set StartDate=@StartDate, EndDate=@EndDate ";
 
-            DbParameter par1 = Database.AddParameter("@StartDate", festivaldata.StartDate);
-            if (par1.Value == null) par1.Value = DBNull.Value;
+                DbParameter par1 = Database.AddParameter("@StartDate", festivaldata.StartDate);
+                if (par1.Value == null) par1.Value = DBNull.Value;
 
-            DbParameter par2 = Database.AddParameter("@EndDate", festivaldata.EndDate);
-            if (par2.Value == null) par2.Value = DBNull.Value;
+                DbParameter par2 = Database.AddParameter("@EndDate", festivaldata.EndDate);
+                if (par2.Value == null) par2.Value = DBNull.Value;
 
-            DbParameter[] pars = new DbParameter[] { par1, par2 };
-            int affected = Database.ModifyData(sSQL, pars);
+                DbParameter[] pars = new DbParameter[] { par1, par2 };
+                int affected = Database.ModifyData(sSQL, pars);
 
-            return affected;
+                return affected;
+            }
+            catch (Exception ex) { Console.WriteLine(ex.Message); return 0; }
         }
 
         //Een nieuw festival toevoegen
         public static int AddFestival(Festival festivaldata) 
         {
-            String sSQL = "INSERT INTO Festival(StartDate, EndDate) VALUES(@StartDate, @EndDate)";
+            try
+            {
+                String sSQL = "INSERT INTO Festival(StartDate, EndDate) VALUES(@StartDate, @EndDate)";
 
-            DbParameter par1 = Database.AddParameter("@StartDate", festivaldata.StartDate);
-            if (par1.Value == null) par1.Value = DBNull.Value;
+                DbParameter par1 = Database.AddParameter("@StartDate", festivaldata.StartDate);
+                if (par1.Value == null) par1.Value = DBNull.Value;
 
-            DbParameter par2 = Database.AddParameter("@EndDate", festivaldata.EndDate);
-            if (par2.Value == null) par2.Value = DBNull.Value;
+                DbParameter par2 = Database.AddParameter("@EndDate", festivaldata.EndDate);
+                if (par2.Value == null) par2.Value = DBNull.Value;
 
-            DbParameter[] pars = new DbParameter[] { par1, par2 };
-            int affected = Database.ModifyData(sSQL, pars);
+                DbParameter[] pars = new DbParameter[] { par1, par2 };
+                int affected = Database.ModifyData(sSQL, pars);
 
-            return affected;
+                return affected;
+            }
+            catch (Exception ex) { Console.WriteLine(ex.Message); return 0; }
         }
 
         //DATAVALIDATIE

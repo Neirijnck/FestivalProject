@@ -36,16 +36,20 @@ namespace FestivalProject
         //Alle genres ophalen
         public static ObservableCollection<Genre> GetGenres() 
         {
-            ObservableCollection<Genre> genres = new ObservableCollection<Genre>();
-            DbDataReader reader = Database.GetData("SELECT * FROM Genre");
-
-            while (reader.Read()) 
+            try
             {
-                Genre genre = Create(reader);
-                genres.Add(genre);
+                ObservableCollection<Genre> genres = new ObservableCollection<Genre>();
+                DbDataReader reader = Database.GetData("SELECT * FROM Genre");
+
+                while (reader.Read())
+                {
+                    Genre genre = Create(reader);
+                    genres.Add(genre);
+                }
+                reader.Close();
+                return genres;
             }
-            reader.Close();
-            return genres;
+            catch (Exception ex) { Console.WriteLine(ex.Message); return null; }
         }
 
         //Een genre id ophalen met zijn naam
@@ -75,32 +79,40 @@ namespace FestivalProject
         //Een nieuw genre toevoegen in database
         public static int AddGenre(Genre genre)
         {
-            String sSQL = "INSERT INTO Genre(Name) VALUES(@Name)";
+            try
+            {
+                String sSQL = "INSERT INTO Genre(Name) VALUES(@Name)";
 
-            DbParameter par1 = Database.AddParameter("@Name", genre.Name);
-            if (par1.Value == null) par1.Value = DBNull.Value;
+                DbParameter par1 = Database.AddParameter("@Name", genre.Name);
+                if (par1.Value == null) par1.Value = DBNull.Value;
 
-            DbParameter[] pars = new DbParameter[] { par1 };
-            int affected = Database.ModifyData(sSQL, pars);
+                DbParameter[] pars = new DbParameter[] { par1 };
+                int affected = Database.ModifyData(sSQL, pars);
 
-            return affected;
+                return affected;
+            }
+            catch (Exception ex) { Console.WriteLine(ex.Message); return 0; }
         }
 
         //Een bestaand genre bewerken
         public static int EditGenre(Genre genre)
         {
-            String sSQL = "Update Genre Set Name=@Name WHERE ID=@ID";
+            try
+            {
+                String sSQL = "Update Genre Set Name=@Name WHERE ID=@ID";
 
-            DbParameter par1 = Database.AddParameter("@Name", genre.Name);
-            if (par1.Value == null) par1.Value = DBNull.Value;
+                DbParameter par1 = Database.AddParameter("@Name", genre.Name);
+                if (par1.Value == null) par1.Value = DBNull.Value;
 
-            DbParameter par2 = Database.AddParameter("@ID", genre.Id);
-            if (par2.Value == null) par2.Value = DBNull.Value;
+                DbParameter par2 = Database.AddParameter("@ID", genre.Id);
+                if (par2.Value == null) par2.Value = DBNull.Value;
 
-            DbParameter[] pars = new DbParameter[] { par1, par2 };
-            int affected = Database.ModifyData(sSQL, pars);
+                DbParameter[] pars = new DbParameter[] { par1, par2 };
+                int affected = Database.ModifyData(sSQL, pars);
 
-            return affected;
+                return affected;
+            }
+            catch (Exception ex) { Console.WriteLine(ex.Message); return 0; }
         }
 
         //Een genre teruggeven adhv zijn id

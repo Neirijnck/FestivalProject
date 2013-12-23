@@ -40,16 +40,20 @@ namespace FestivalProject
         //Alle contactpersoontypes ophalen
         public static ObservableCollection<ContactpersonType> GetContactpersonTypes() 
         {
-            ObservableCollection<ContactpersonType> cpersontypes = new ObservableCollection<ContactpersonType>();
-            DbDataReader reader = Database.GetData("SELECT * FROM ContactpersonType");
-
-            while (reader.Read()) 
+            try
             {
-                ContactpersonType cpersonType = Create(reader);
-                cpersontypes.Add(cpersonType);
+                ObservableCollection<ContactpersonType> cpersontypes = new ObservableCollection<ContactpersonType>();
+                DbDataReader reader = Database.GetData("SELECT * FROM ContactpersonType");
+
+                while (reader.Read())
+                {
+                    ContactpersonType cpersonType = Create(reader);
+                    cpersontypes.Add(cpersonType);
+                }
+                reader.Close();
+                return cpersontypes;
             }
-            reader.Close();
-            return cpersontypes;
+            catch (Exception ex) { Console.WriteLine(ex.Message); return null; }
         }
 
         //Een nieuw contactpersoontype creeren
@@ -65,32 +69,40 @@ namespace FestivalProject
         //Een bestaand contactpersoontype bewerken
         public static int EditContactPersonType(ContactpersonType Type)
         {
-            String sSQL = "Update ContactpersonType Set Name=@Name WHERE ID=@Id";
+            try
+            {
+                String sSQL = "Update ContactpersonType Set Name=@Name WHERE ID=@Id";
 
-            DbParameter par1 = Database.AddParameter("@Name", Type.Name);
-            if (par1.Value == null) par1.Value = DBNull.Value;
+                DbParameter par1 = Database.AddParameter("@Name", Type.Name);
+                if (par1.Value == null) par1.Value = DBNull.Value;
 
-            DbParameter par2 = Database.AddParameter("@Id", Type.Id);
-            if (par2.Value == null) par2.Value = DBNull.Value;
+                DbParameter par2 = Database.AddParameter("@Id", Type.Id);
+                if (par2.Value == null) par2.Value = DBNull.Value;
 
-            DbParameter[] pars = new DbParameter[] { par1, par2 };
-            int affected = Database.ModifyData(sSQL, pars);
+                DbParameter[] pars = new DbParameter[] { par1, par2 };
+                int affected = Database.ModifyData(sSQL, pars);
 
-            return affected;
+                return affected;
+            }
+            catch (Exception ex) { Console.WriteLine(ex.Message); return 0; }
         }
 
         //Een contactpersoontype toevoegen
         public static int AddContactPersonType(ContactpersonType type) 
         {
-            String sSQL = "INSERT INTO ContactpersonType(Name) VALUES(@Name)";
+            try
+            {
+                String sSQL = "INSERT INTO ContactpersonType(Name) VALUES(@Name)";
 
-            DbParameter par1 = Database.AddParameter("@Name", type.Name);
-            if (par1.Value == null) par1.Value = DBNull.Value;
+                DbParameter par1 = Database.AddParameter("@Name", type.Name);
+                if (par1.Value == null) par1.Value = DBNull.Value;
 
-            DbParameter[] pars = new DbParameter[] { par1 };
-            int affected = Database.ModifyData(sSQL, pars);
+                DbParameter[] pars = new DbParameter[] { par1 };
+                int affected = Database.ModifyData(sSQL, pars);
 
-            return affected;
+                return affected;
+            }
+            catch (Exception ex) { Console.WriteLine(ex.Message); return 0; }
         }
 
         //Contactpersoontype teruggeven adhv zijn id

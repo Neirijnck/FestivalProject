@@ -36,17 +36,21 @@ namespace FestivalProject
         //Alle stages ophalen
         public static ObservableCollection<Stage> GetStages() 
         {
-            ObservableCollection<Stage> stages = new ObservableCollection<Stage>();
-
-            DbDataReader reader = Database.GetData("SELECT * FROM Stage");
-
-            while (reader.Read()) 
+            try
             {
-                Stage stage = Create(reader);
-                stages.Add(stage);
+                ObservableCollection<Stage> stages = new ObservableCollection<Stage>();
+
+                DbDataReader reader = Database.GetData("SELECT * FROM Stage");
+
+                while (reader.Read())
+                {
+                    Stage stage = Create(reader);
+                    stages.Add(stage);
+                }
+                reader.Close();
+                return stages;
             }
-            reader.Close();
-            return stages;
+            catch (Exception ex) { Console.WriteLine(ex.Message); return null; }
         }
 
         //Een nieuwe stage maken
@@ -75,32 +79,40 @@ namespace FestivalProject
         //Een nieuwe stage toevoegen in database
         public static int AddStage(Stage stage) 
         {
-            String sSQL = "INSERT INTO Stage(Name) VALUES(@Name)";
+            try
+            {
+                String sSQL = "INSERT INTO Stage(Name) VALUES(@Name)";
 
-            DbParameter par1 = Database.AddParameter("@Name", stage.Name);
-            if (par1.Value == null) par1.Value = DBNull.Value;
+                DbParameter par1 = Database.AddParameter("@Name", stage.Name);
+                if (par1.Value == null) par1.Value = DBNull.Value;
 
-            DbParameter[] pars = new DbParameter[] { par1};
-            int affected = Database.ModifyData(sSQL, pars);
+                DbParameter[] pars = new DbParameter[] { par1 };
+                int affected = Database.ModifyData(sSQL, pars);
 
-            return affected;
+                return affected;
+            }
+            catch (Exception ex) { Console.WriteLine(ex.Message); return 0; }
         }
 
         //Een bestaande stage bewerken
         public static int EditStage(Stage stage)
         {
-            String sSQL = "Update Stage Set Name=@Name WHERE ID=@ID";
+            try
+            {
+                String sSQL = "Update Stage Set Name=@Name WHERE ID=@ID";
 
-            DbParameter par1 = Database.AddParameter("@Name", stage.Name);
-            if (par1.Value == null) par1.Value = DBNull.Value;
+                DbParameter par1 = Database.AddParameter("@Name", stage.Name);
+                if (par1.Value == null) par1.Value = DBNull.Value;
 
-            DbParameter par2 = Database.AddParameter("@ID", stage.Id);
-            if (par2.Value == null) par2.Value = DBNull.Value;
+                DbParameter par2 = Database.AddParameter("@ID", stage.Id);
+                if (par2.Value == null) par2.Value = DBNull.Value;
 
-            DbParameter[] pars = new DbParameter[] { par1, par2};
-            int affected = Database.ModifyData(sSQL, pars);
+                DbParameter[] pars = new DbParameter[] { par1, par2 };
+                int affected = Database.ModifyData(sSQL, pars);
 
-            return affected;
+                return affected;
+            }
+            catch (Exception ex) { Console.WriteLine(ex.Message); return 0; }
         }
 
         //DATAVALIDATIE
